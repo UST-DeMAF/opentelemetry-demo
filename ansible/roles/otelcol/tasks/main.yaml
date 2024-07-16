@@ -1,0 +1,33 @@
+---
+- name: Pull the latest Docker image
+  docker_image:
+    name: "{{ image_name }}"
+    source: pull
+
+- name: Deploy Service
+  docker_container:
+    name: "{{ service_name }}"
+    image: "{{ image_name }}"
+    env:
+      OTEL_COLLECTOR_HOST: "localhost"
+      OTEL_COLLECTOR_PORT_GRPC: "4317"
+      OTEL_COLLECTOR_PORT_HTTP: "4318"
+      ENVOY_PORT: "8080"
+    restart_policy: unless-stopped
+    command: "{{ command }}"
+    user: "{{ user }}"
+    memory: "{{ memory_limit }}"
+    state: started
+    ports: "{{ ports }}"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./src/otelcollector/otelcol-config.yml:/etc/otelcol-config.yml"
+      - "./src/otelcollector/otelcol-config-extras.yml:/etc/otelcol-config-extras.yml"
+    network_mode: bridge
+    networks:
+      - name: opentelemetry-demo
+    log_driver: "json-file"
+    log_options:
+      max-size: "5m"
+      max-file: "2"
+      tag: "{{ service_name }}"

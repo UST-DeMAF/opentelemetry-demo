@@ -15,19 +15,12 @@
         driver: bridge
 
   roles:
-    - role: deploy-docker # TODO model dependencies
+    - role: accountingservice
       become: true
-      vars:
-        service_name: "accountingservice"
-        demo_version: "1.10.0"
-        image_name: "ghcr.io/open-telemetry/demo:1.10.0-accountingservice"
-        ports: "8080:8080"
-        env:
-          KAFKA_SERVICE_ADDR: "http://localhost:9092"
-          OTEL_EXPORTER_OTLP_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_http }}"
-          OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
-          OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
-          OTEL_SERVICE_NAME: "{{ service_name }}"
+    - role: kafka
+      become: true
+    - role: otelcol
+      become: true
 
   post_tasks:
     - name: Ensure services are started
@@ -36,6 +29,8 @@
         state: started
       loop:
         - accountingservice
+        - kafka
+        - otelcol
         #- ad-service
         #- cart-service
         #- checkout-service
@@ -47,6 +42,8 @@
         enabled: yes
       loop:
         - accountingservice
+        - kafka
+        - otelcol
         #- ad-service
         #- cart-service
         #- checkout-service

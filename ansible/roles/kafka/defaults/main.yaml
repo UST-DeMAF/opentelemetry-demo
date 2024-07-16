@@ -1,0 +1,14 @@
+service_name: "kafka"
+demo_version: "1.10.0"
+image_name: "ghcr.io/open-telemetry/demo:1.10.0-kafka"
+ports: "9092:9092"
+otel_collector_host: "localhost"
+otel_collector_port_http: "4318"
+otlp_metrics_temporality_preference : "cumulative"
+memory_limit: "600M"
+
+
+
+
+
+
