@@ -1,0 +1,14 @@
+---
+dependencies:
+  - role: adservice
+  - role: cartservice
+  - role: checkoutservice
+  - role: currencyservice
+#  - role: productcatalogservice TODO ACTIVATE
+#  - role: quoteservice
+#  - role: recommendationservice
+#  - role: shippingservice
+#  - role: otelcol
+#  - role: imageprovider
+#  - role: flagd
+#

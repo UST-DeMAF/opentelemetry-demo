@@ -13,10 +13,22 @@
       OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
-      KAFKA_SERVICE_ADDR: "{{ kafka_service_addr }}"
+      OTEL_LOGS_EXPORTER: "{{ logs_exporter }}"
+      CHECKOUT_SERVICE_PORT: "5050" # TODO Beafutify
+      FLAGD_HOST: "flagd"
+      FLAGD_PORT: "8013"
+      CART_SERVICE_ADDR: "cartservice:7070"
+      CURRENCY_SERVICE_ADDR: "currencyservice:7001"
+      EMAIL_SERVICE_ADDR: "http://emailservice:6060"
+      PAYMENT_SERVICE_ADDR: "paymentservice:50051"
+      PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
+      SHIPPING_SERVICE_ADDR: "shippingservice:50050"
+      KAFKA_SERVICE_ADDR: "kafka:9092"
+
     restart_policy: unless-stopped
     memory: "{{ memory_limit }}"
     state: started
+    ports: "{{ ports }}"
     network_mode: bridge
     networks:
       - name: opentelemetry-demo

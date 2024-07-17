@@ -13,10 +13,15 @@
       OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
-      KAFKA_SERVICE_ADDR: "{{ kafka_service_addr }}"
+      OTEL_LOGS_EXPORTER: "{{ logs_exporter }}"
+
+      AD_SERVICE_PORT: "9555" # TODO beatufiy
+      FLAGD_HOST: "flagd"
+      FLAGD_PORT: "8013"
     restart_policy: unless-stopped
     memory: "{{ memory_limit }}"
     state: started
+    ports: "{{ ports }}"
     network_mode: bridge
     networks:
       - name: opentelemetry-demo

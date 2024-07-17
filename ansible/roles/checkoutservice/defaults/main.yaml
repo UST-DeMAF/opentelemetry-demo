@@ -1,0 +1,10 @@
+service_name: "checkoutservice"
+demo_version: "1.10.0"
+image_name: "ghcr.io/open-telemetry/demo:1.10.0-checkoutservice"
+ports: "5050:5050"
+otel_collector_host: "localhost"
+otel_collector_port_http: "4318"
+otlp_metrics_temporality_preference : "cumulative"
+memory_limit: "20M"
+
+logs_exporter: "otlp"

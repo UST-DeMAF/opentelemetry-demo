@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: otelcol
+  #- role: flagd TODO activate
+  #- role: valkey-cart
