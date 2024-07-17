@@ -35,6 +35,13 @@
       become: true
     - role: frontend
       become: true
+    - role: frontendproxy
+      become: true
+    - role: imageprovider
+      become: true
+    - role: loadgenerator
+      become: true
+      #TODO Add other services here...
 
   post_tasks:
     - name: Ensure services are started
@@ -43,14 +50,17 @@
         state: started
       loop:
         - accountingservice
-        - kafka
-        - otelcol
         - adservice
         - cartservice
         - checkoutservice
         - emailservice
         - frauddetectionserice
         - frontend
+        - frontendproxy
+        - imageprovider
+        - kafka
+        - otelcol
+        - loadgenerator
         #TODO Add other services here...
 
     - name: Ensure services are enabled to start at boot
@@ -59,12 +69,15 @@
         enabled: yes
       loop:
         - accountingservice
-        - kafka
-        - otelcol
         - adservice
         - cartservice
         - checkoutservice
         - emailservice
         - frauddetectionserice
         - frontend
+        - frontendproxy
+        - imageprovider
+        - kafka
+        - loadgenerator
+        - otelcol
         #TODO Add other services here...

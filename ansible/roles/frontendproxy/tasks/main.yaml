@@ -1,0 +1,45 @@
+---
+- name: Pull the latest Docker image
+  docker_image:
+    name: "{{ image_name }}:{{ demo_version }}-{{ service_name }}"
+    source: pull
+
+- name: Deploy Service
+  docker_container:
+    name: "{{ service_name }}"
+    image: "{{ image_name }}"
+    env:
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_http }}"
+      OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
+      OTEL_SERVICE_NAME: "{{ service_name }}"
+      OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
+      VERSION: "{{ demo_version }}"
+
+      FLAGD_HOST: "flagd" #TODO Beautify
+      FLAGD_PORT: "8013"
+      FRONTEND_PORT: "8080"
+      FRONTEND_HOST: "frontend"
+      LOCUST_WEB_HOST: "loadgenerator"
+      LOCUST_WEB_PORT: "8089"
+      GRAFANA_SERVICE_PORT: "3000"
+      GRAFANA_SERVICE_HOST: "grafana"
+      JAEGER_SERVICE_PORT: "16686"
+      JAEGER_SERVICE_HOST: "jaeger"
+      IMAGE_PROVIDER_HOST: "imageprovider"
+      IMAGE_PROVIDER_PORT: "8081"
+      OTEL_COLLECTOR_PORT_GRPC: "4317"
+      OTEL_COLLECTOR_PORT_HTTP: "4318"
+      ENVOY_PORT: "8080"
+
+    restart_policy: unless-stopped
+    memory: "{{ memory_limit }}"
+    ports: "{{ ports }}"
+    state: started
+    network_mode: bridge
+    networks:
+      - name: opentelemetry-demo
+    log_driver: "json-file"
+    log_options:
+      max-size: "5m"
+      max-file: "2"
+      tag: "{{ service_name }}"
