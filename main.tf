@@ -35,12 +35,17 @@ resource "docker_container" "accountingservice-container" {
   name       = "accounting-service"
   image      = "ghcr.io/open-telemetry/demo:latest-accountingservice"
   depends_on = [docker_container.otelcol, docker_container.kafka]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "accountingservice"
   memory     = 20
   restart    = "unless-stopped"
   env = [
-    "KAFKA_SERVICE_ADDR= kafka:9092",
-    "OTEL_EXPORTER_OTLP_ENDPOINT = http://otel-collector:4317",
-    "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE = Cumulative",
+    "KAFKA_SERVICE_ADDR=kafka:9092",
+    "OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317",
+    "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=Cumulative",
     "OTEL_RESOURCE_ATTRIBUTES=docker.cli.cobra.command_path=docker%20compose",
     "OTEL_SERVICE_NAME = accountingservice"
   ]
@@ -53,17 +58,22 @@ resource "docker_container" "adservice-container" {
   name       = "ad-service"
   image      = "ghcr.io/open-telemetry/demo:latest-adservice"
   depends_on = [docker_container.otelcol, docker_container.flagd]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "adservice"
   memory     = 300
   restart    = "unless-stopped"
   ports {
     internal = 9555
   }
   env = [
-    "AD_SERVICE_PORT = 9555",
-    "FLAGD_HOST = flagd",
-    "FLAGD_PORT = 8013",
+    "AD_SERVICE_PORT=9555",
+    "FLAGD_HOST=flagd",
+    "FLAGD_PORT=8013",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318",
-    "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE = Cumulative",
+    "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=Cumulative",
     "OTEL_RESOURCE_ATTRIBUTES=docker.cli.cobra.command_path=docker%20compose",
     "OTEL_LOGS_EXPORTER=otlp",
     "OTEL_SERVICE_NAME=adservice"
@@ -76,6 +86,11 @@ resource "docker_container" "cartservice-container" {
   name       = "cart-service"
   image      = "ghcr.io/open-telemetry/demo:latest-cartservice"
   depends_on = [docker_container.valkey-cart, docker_container.otelcol, docker_container.flagd]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "cartservice"
   memory     = 160
   restart    = "unless-stopped"
   ports {
@@ -108,6 +123,11 @@ resource "docker_container" "checkoutservice-container" {
     docker_container.shippingservice,
     docker_container.otelcol,
   docker_container.flagd]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "checkoutservice"
   memory  = 20
   restart = "unless-stopped"
   ports {
@@ -139,15 +159,20 @@ resource "docker_container" "currencyservice-container" {
   name       = "currency-service"
   image      = "ghcr.io/open-telemetry/demo:latest-currencyservice"
   depends_on = [docker_container.otelcol]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "currencyservice"
   memory     = 20
   restart    = "unless-stopped"
   ports {
     internal = 7001
   }
   env = [
-    "CURRENCY_SERVICE_PORT = 7001",
+    "CURRENCY_SERVICE_PORT=7001",
     "VERSION=1.10.0",
-    "OTEL_EXPORTER_OTLP_ENDPOINT =http://otelcol:4317",
+    "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317",
     "OTEL_RESOURCE_ATTRIBUTES=docker.cli.cobra.command_path=docker%20compose ,service.name=currencyservice"
   ]
 
@@ -159,6 +184,11 @@ resource "docker_container" "emailservice-container" {
   name       = "email-service"
   image      = "demo/emailservice-contrib:latest"
   depends_on = [docker_container.otelcol]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "emailservice"
   memory     = 100
   restart    = "unless-stopped"
   ports {
@@ -180,14 +210,19 @@ resource "docker_container" "frauddetectionservice-container" {
   name       = "frauddetection-service"
   image      = "ghcr.io/open-telemetry/demo:latest-frauddetectionservice"
   depends_on = [docker_container.otelcol, docker_container.kafka]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "frauddetectionservice"
   memory     = 300
   restart    = "unless-stopped"
   env = [
-    "FLAGD_HOST = flagd",
-    "FLAGD_PORT = 8013",
-    "KAFKA_SERVICE_ADDR = kafka:9092",
+    "FLAGD_HOST=flagd",
+    "FLAGD_PORT=8013",
+    "KAFKA_SERVICE_ADDR=kafka:9092",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318",
-    "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE = Cumulative",
+    "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=Cumulative",
     "OTEL_INSTRUMENTATION_KAFKA_EXPERIMENTAL_SPAN_ATTRIBUTES=true",
     "OTEL_INSTRUMENTATION_MESSAGING_EXPERIMENTAL_RECEIVE_TELEMETRY_ENABLED=true",
     "OTEL_RESOURCE_ATTRIBUTES=docker.cli.cobra.command_path=docker%20compose",
@@ -213,6 +248,10 @@ resource "docker_container" "frontend" {
     docker_container.imageprovider,
     docker_container.flagd
   ]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   memory  = 250
   restart = "unless-stopped"
   ports {
@@ -250,6 +289,11 @@ resource "docker_container" "frontendproxy" {
     docker_container.loadgenerator,
     docker_container.jaeger,
   docker_container.grafana]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "frontendproxy"
   memory  = 50
   restart = "unless-stopped"
   ports {
@@ -288,6 +332,11 @@ resource "docker_container" "imageprovider" {
   name       = "image-provider"
   image      = "ghcr.io/open-telemetry/demo:latest-imageprovider"
   depends_on = [docker_container.otelcol]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "imageprovider"
   memory     = 120
   restart    = "unless-stopped"
   ports {
@@ -310,6 +359,11 @@ resource "docker_container" "loadgenerator" {
   image = "ghcr.io/open-telemetry/demo:latest-loadgenerator"
   depends_on = [docker_container.frontend,
   docker_container.flagd]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "loadgenerator"
   memory  = 1000
   restart = "unless-stopped"
   ports {
@@ -341,6 +395,11 @@ resource "docker_container" "paymentservice" {
   image = "ghcr.io/open-telemetry/demo:latest-paymentservice"
   depends_on = [docker_container.otelcol,
   docker_container.flagd]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "paymentservice"
   memory  = 120
   restart = "unless-stopped"
   ports {
@@ -366,6 +425,11 @@ resource "docker_container" "productcatalogservice" {
   depends_on = [docker_container.otelcol,
     docker_container.flagd,
   docker_container.mongodb-catalog]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "productcatalogservice"
   memory  = 20
   restart = "unless-stopped"
   ports {
@@ -392,6 +456,11 @@ resource "docker_container" "quoteservice" {
   name       = "quote-service"
   image      = "ghcr.io/open-telemetry/demo:latest-quoteservice"
   depends_on = [docker_container.otelcol]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "quoteservice"
   memory     = 40
   restart    = "unless-stopped"
   ports {
@@ -417,6 +486,11 @@ resource "docker_container" "recommendationservice" {
     docker_container.otelcol,
     docker_container.flagd
   ]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "recommendationservice"
   memory  = 500
   restart = "unless-stopped"
   ports {
@@ -443,6 +517,11 @@ resource "docker_container" "shippingservice" {
   name       = "shipping-service"
   image      = "ghcr.io/open-telemetry/demo:latest-shippingservice"
   depends_on = [docker_container.otelcol]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "shippingservice"
   memory     = 20
   restart    = "unless-stopped"
   ports {
@@ -471,6 +550,10 @@ resource "docker_container" "flagd" {
     "OTEL_RESOURCE_ATTRIBUTES=docker.cli.cobra.command_path=docker%20compose",
     "OTEL_SERVICE_NAME=flagd"
   ]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   command = [
     "start",
     "--uri",
@@ -492,6 +575,10 @@ resource "docker_container" "kafka" {
   name    = "kafka"
   image   = "ghcr.io/open-telemetry/demo:latest-kafka"
   memory  = 600
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   restart = "unless-stopped"
   ports {
     internal = 9092
@@ -522,6 +609,10 @@ resource "docker_container" "valkey-cart" {
   user    = "valkey"
   memory  = 20
   restart = "unless-stopped"
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   ports {
     internal = 6379
   }
@@ -534,6 +625,11 @@ resource "docker_container" "mongodb-catalog" {
   image   = "mongo:8.0.0-rc9"
   memory  = 256
   restart = "unless-stopped"
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
+  hostname = "mongo"
   ports {
     internal = 27017
     external = 27017
@@ -569,6 +665,10 @@ resource "docker_container" "jaeger" {
   ]
   memory  = 400
   restart = "unless-stopped"
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   ports {
     internal = 16686
   }
@@ -585,6 +685,10 @@ resource "docker_container" "jaeger" {
 resource "docker_container" "grafana" {
   name    = "grafana"
   image   = "grafana/grafana:10.4.3"
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   memory  = 100
   restart = "unless-stopped"
   env     = ["GF_INSTALL_PLUGINS=grafana-opensearch-datasource"]
@@ -609,6 +713,10 @@ resource "docker_container" "otelcol" {
   name       = "otelcol"
   image      = "otel/opentelemetry-collector-contrib:0.102.1"
   depends_on = [docker_container.jaeger]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   memory     = 200
   restart    = "unless-stopped"
   command    = ["--config=/etc/otelcol-config.yml", "--config=/etc/otelcol-config-extras.yml"
@@ -620,6 +728,10 @@ resource "docker_container" "otelcol" {
   volumes {
     host_path      = "${var.project_path}${var.seperator}src${var.seperator}otelcollector${var.seperator}otelcol-config-extras.yml"
     container_path = "/etc/otelcol-config-extras.yml"
+  }
+  volumes {
+    host_path = "/var/run/docker.sock"
+    container_path = "/var/run/docker.sock"
   }
   ports {
     internal = 4317
@@ -650,6 +762,10 @@ resource "docker_container" "prometheus" {
     "--enable-feature=exemplar-storage", 
     "--enable-feature=otlp-write-receiver"
   ]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   volumes {
     host_path      = "${var.project_path}${var.seperator}src${var.seperator}prometheus${var.seperator}prometheus-config.yaml"
     container_path = "/etc/prometheus/prometheus-config.yaml"
@@ -667,6 +783,10 @@ resource "docker_container" "prometheus" {
 resource "docker_container" "opensearch" {
   name    = "opensearch"
   image   = "opensearchproject/opensearch:1.2.0"
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   memory  = 1000
   restart = "unless-stopped"
   env = [
@@ -690,6 +810,10 @@ resource "docker_container" "namfrontendTests" {
   name       = "frontend-tests"
   image      = "ghcr.io/open-telemetry/demo:latest-frontend-tests"
   depends_on = [docker_container.frontend]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   volumes {
     host_path      = "${var.project_path}${var.seperator}src${var.seperator}frontend${var.seperator}cypress${var.seperator}videos"
     container_path = "/app/cypress/videos"
@@ -724,6 +848,10 @@ resource "docker_container" "traceBasedTests" {
     docker_container.accountingservice-container,
     docker_container.frauddetectionservice-container,
   docker_container.flagd]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   env = [
     "AD_SERVICE_ADDR=adservice:9555",
     "CART_SERVICE_ADDR =  cartservice:7070",
@@ -753,7 +881,11 @@ resource "docker_container" "traceBasedTests" {
 resource "docker_container" "tracetest-server" {
   name       = "tracetest-server"
   image      = "kubeshop/tracetest:v1.3.0"
-  depends_on = [docker_container.tracetest-postgres, docker_container.otelcol]
+  depends_on = [docker_container.tracetest-postgres, docker_container.otelcol, docker_container.frontendproxy]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   volumes {
     host_path      = "${var.project_path}${var.seperator}test${var.seperator}tracetesting${var.seperator}tracetest-config.yaml"
     container_path = "/app/tracetest.yaml"
@@ -785,6 +917,10 @@ resource "docker_container" "tracetest-postgres" {
     "POSTGRES_PASSWORD= postgres",
     "POSTGRES_USER= postgres"
   ]
+  network_mode = "bridge"
+  networks_advanced {
+    name = docker_network.open-telemetry-network.name
+  }
   healthcheck {
     test     = ["pg_isready", "-U", "$$POSTGRES_USER", "-d", "$$POSTGRES_DB"]
     interval = "1s"
