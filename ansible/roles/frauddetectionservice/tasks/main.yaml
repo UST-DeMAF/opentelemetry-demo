@@ -12,21 +12,20 @@
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_http }}"
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
-
-      FLAGD_HOST: "flagd" #TODO Beautify
-      FLAGD_PORT: "8013"
-      KAFKA_SERVICE_ADDR: "kafka:9092"
+      FLAGD_HOST: "{{ flagd_host }}"
+      FLAGD_PORT: "{{ flagd_port }}"
+      KAFKA_SERVICE_ADDR: "{{ kafkaservice_addr }}"
       OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
-      OTEL_INSTRUMENTATION_KAFKA_EXPERIMENTAL_SPAN_ATTRIBUTES: "true"
-      OTEL_INSTRUMENTATION_MESSAGING_EXPERIMENTAL_RECEIVE_TELEMETRY_ENABLED: "true"
-    restart_policy: unless-stopped
+      OTEL_INSTRUMENTATION_KAFKA_EXPERIMENTAL_SPAN_ATTRIBUTES: "{{ otlp_experimental_features }}"
+      OTEL_INSTRUMENTATION_MESSAGING_EXPERIMENTAL_RECEIVE_TELEMETRY_ENABLED: "{{ otlp_experimental_features }}"
+    restart_policy: "{{ restart_policy }}"
     memory: "{{ memory_limit }}"
-    state: started
-    network_mode: opentelemetry-demo
+    state: "{{ state }}"
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

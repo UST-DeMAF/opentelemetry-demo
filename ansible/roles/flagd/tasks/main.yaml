@@ -15,15 +15,14 @@
       OTEL_SERVICE_NAME: "{{ service_name }}"
     memory: "{{ memory_limit }}"
     ports: "{{ ports }}"
-    state: started
+    state: "{{ state }}"
     command: "{{ command }}"
-    volumes:
-      - /Users/p371728/master/demaf/opentelemetry-demo/src/flagd:/etc/flagd # TODO Beautify
-    network_mode: opentelemetry-demo
+    volumes: "{{ volumes }}"
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

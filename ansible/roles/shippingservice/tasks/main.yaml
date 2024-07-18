@@ -12,17 +12,17 @@
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_grpc }}"
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
-      SHIPPING_SERVICE_PORT: "50050" # TODO beatuify
-      QUOTE_SERVICE_ADDR: "http://quoteservice:8090"
-    restart_policy: unless-stopped
+      SHIPPING_SERVICE_PORT: "{{ ports }}"
+      QUOTE_SERVICE_ADDR: "{{ quoteservice_addr }}"
+    restart_policy: "{{ restart_policy }}"
     memory: "{{ memory_limit }}"
     ports: "{{ ports }}"
-    state: started
-    network_mode: opentelemetry-demo
+    state: "{{ state }}"
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

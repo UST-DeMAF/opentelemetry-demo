@@ -10,17 +10,17 @@
     name: "{{ service_name }}"
     image: "{{ image_name }}"
     env:
-      METRICS_STORAGE_TYPE: "prometheus"
-    restart_policy: unless-stopped
+      METRICS_STORAGE_TYPE: "{{ metrics_storage_type }}"
+    restart_policy: "{{ restart_policy }}"
     command: "{{ command }}"
     memory: "{{ memory_limit }}"
-    state: started
+    state: "{{ state }}"
     ports: "{{ ports }}"
-    network_mode: opentelemetry-demo
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

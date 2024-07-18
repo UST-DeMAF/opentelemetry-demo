@@ -1,8 +1,5 @@
 service_name: "paymentservice"
-demo_version: "1.10.0"
 image_name: "ghcr.io/open-telemetry/demo:1.10.0-paymentservice"
 ports: "50051"
-otel_collector_host: "otelcol"
-otel_collector_port_grpc: "4317"
 otlp_metrics_temporality_preference : "cumulative"
 memory_limit: "120M"

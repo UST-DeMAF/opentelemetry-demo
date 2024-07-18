@@ -9,3 +9,4 @@ command: '- "--memory.max-traces=5000"
 ports:
   - "16686"
   - "4317"
+metrics_storage_type: "prometheus"

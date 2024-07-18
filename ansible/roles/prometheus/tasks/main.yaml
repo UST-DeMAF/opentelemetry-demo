@@ -10,17 +10,16 @@
     name: "{{ service_name }}"
     image: "{{ image_name }}"
     command: "{{ command }}"
-    restart_policy: unless-stopped
+    restart_policy: "{{ restart_policy }}"
     memory: "{{ memory_limit }}"
-    volumes: # TODO Beautify
-      - /Users/p371728/master/demaf/opentelemetry-demo/src/prometheus/prometheus-config.yaml:/etc/prometheus/prometheus-config.yaml
-    state: started
+    volumes: "{{ volumes }}"
+    state: "{{ state }}"
     ports: "{{ ports }}"
-    network_mode: opentelemetry-demo
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

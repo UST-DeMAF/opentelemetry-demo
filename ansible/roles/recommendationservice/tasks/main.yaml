@@ -13,22 +13,21 @@
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
       OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
-      OTEL_PYTHON_LOG_CORRELATION: "true"
-
-      RECOMMENDATION_SERVICE_PORT: "9001" # TODO beatuify
-      PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
-      FLAGD_HOST: "flagd"
-      FLAGD_PORT: "8013"
-      PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: "python"
-    restart_policy: unless-stopped
+      OTEL_PYTHON_LOG_CORRELATION: "{{ otel_python_features }}"
+      RECOMMENDATION_SERVICE_PORT: "{{ ports }}"
+      PRODUCT_CATALOG_SERVICE_ADDR: "{{ productcatalogservice_addr }}"
+      FLAGD_HOST: "{{ flagd_host }}"
+      FLAGD_PORT: "{{ flagd_port }}"
+      PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: "{{ protobuf_python }}"
+    restart_policy: "{{ restart_policy }}"
     memory: "{{ memory_limit }}"
     ports: "{{ ports }}"
-    state: started
-    network_mode: opentelemetry-demo
+    state: "{{ state }}"
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

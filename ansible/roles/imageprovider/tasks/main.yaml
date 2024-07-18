@@ -14,16 +14,16 @@
       VERSION: "{{ demo_version }}"
       OTEL_COLLECTOR_HOST: "{{ otel_collector_host }}"
       OTEL_COLLECTOR_PORT_GRPC: "{{ otel_collector_port_grpc }}"
-      IMAGE_PROVIDER_PORT: "8081" # TODO beautify
-    restart_policy: unless-stopped
+      IMAGE_PROVIDER_PORT: "{{ ports }}"
+    restart_policy: "{{ restart_policy }}"
     memory: "{{ memory_limit }}"
     ports: "{{ ports }}"
-    state: started
-    network_mode: opentelemetry-demo
+    state: "{{ state }}"
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

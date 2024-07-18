@@ -14,19 +14,18 @@
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
       OTEL_LOGS_EXPORTER: "{{ logs_exporter }}"
-
-      AD_SERVICE_PORT: "9555" # TODO beatufiy
-      FLAGD_HOST: "flagd"
-      FLAGD_PORT: "8013"
-    restart_policy: unless-stopped
+      AD_SERVICE_PORT: "{{ ports }}"
+      FLAGD_HOST: "{{ flagd_host }}"
+      FLAGD_PORT: "{{ flagd_port }}"
+    restart_policy: "{{ restart_policy }}"
     memory: "{{ memory_limit }}"
-    state: started
+    state: "{{ state }}"
     ports: "{{ ports }}"
-    network_mode: opentelemetry-demo
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

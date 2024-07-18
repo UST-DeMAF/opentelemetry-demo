@@ -12,17 +12,17 @@
       OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_http }}/v1/traces"
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
-      EMAIL_SERVICE_PORT: "6060" # TODO Beautify
-      APP_ENV: "production"
-    restart_policy: unless-stopped
+      EMAIL_SERVICE_PORT: "{{ ports }}"
+      APP_ENV: "{{ app_env }}"
+    restart_policy: "{{ restart_policy }}"
     memory: "{{ memory_limit }}"
-    state: started
+    state: "{{ state }}"
     ports: "{{ ports }}"
-    network_mode: opentelemetry-demo
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

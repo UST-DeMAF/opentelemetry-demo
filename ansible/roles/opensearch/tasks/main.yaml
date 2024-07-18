@@ -9,26 +9,17 @@
   docker_container:
     name: "{{ service_name }}"
     image: "{{ image_name }}"
-    env:
-      cluster.name: "demo-cluster"
-      node.name: "demo-node"
-      bootstrap.memory_lock: "true"
-      discovery.type: "single-node"
-      OPENSEARCH_JAVA_OPTS: "-Xms300m -Xmx300m"
-      DISABLE_INSTALL_DEMO_CONFIG: "true"
-      DISABLE_SECURITY_PLUGIN: "true"
-    ulimits:
-      - "memlock:-1:-1"
-      - "nofile:65536:65536"
-    restart_policy: unless-stopped
+    env: "{{ env }}"
+    ulimits: "{{ ulimits }}"
+    restart_policy: "{{ restart_policy }}"
     memory: "{{ memory_limit }}"
-    state: started
+    state: "{{ state }}"
     ports: "{{ ports }}"
-    network_mode: opentelemetry-demo
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

@@ -1,7 +1,5 @@
 service_name: "quoteservice"
-demo_version: "1.10.0"
 image_name: "ghcr.io/open-telemetry/demo:1.10.0-quoteservice"
 ports: "8090"
-otel_collector_host: "otelcol"
-otel_collector_port_http: "4318"
 memory_limit: "40M"
+otel_php_features: "true"

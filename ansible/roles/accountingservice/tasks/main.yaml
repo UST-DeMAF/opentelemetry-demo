@@ -13,15 +13,15 @@
       OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
-      KAFKA_SERVICE_ADDR: "{{ kafka_service_addr }}"
-    restart_policy: unless-stopped
+      KAFKA_SERVICE_ADDR: "{{ kafkaservice_addr }}"
+    restart_policy: "{{ restart_policy }}"
     memory: "{{ memory_limit }}"
-    state: started
-    network_mode: opentelemetry-demo
+    state: "{{ state }}"
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

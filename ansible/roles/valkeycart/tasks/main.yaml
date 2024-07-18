@@ -10,13 +10,13 @@
     image: "{{ image_name }}"
     memory: "{{ memory_limit }}"
     ports: "{{ ports }}"
-    state: started
+    state: "{{ state }}"
     user: "{{ user }}"
-    network_mode: opentelemetry-demo
+    network_mode: "{{ network_name }}"
     networks:
-      - name: opentelemetry-demo
-    log_driver: "json-file"
+      - name: "{{ network_name }}"
+    log_driver: "{{ log_driver }}"
     log_options:
-      max-size: "5m"
-      max-file: "2"
+      max-size: "{{ log_options_max_size }}"
+      max-file: "{{ log_options_max_file }}"
       tag: "{{ service_name }}"

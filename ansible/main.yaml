@@ -2,6 +2,20 @@
 - name: Deploy OpenTelemetry Demo
   hosts: all
   become: true
+  vars:
+    demo_version: "1.10.0"
+    network_name: "opentelemetry-demo"
+    state: "started"
+    restart_policy: "unless-stopped"
+    log_driver: "json-file"
+    log_options_max_size: "5m"
+    log_options_max_file: "2"
+    flagd_host: "flagd"
+    flagd_port: "8013"
+    otel_collector_host: "otelcol"
+    otel_collector_port_grpc: "4317"
+    otel_collector_port_http: "4318"
+    envoy_port: "8080"
   pre_tasks:
     #- name: Ensure Docker is installed
     #  apt:
@@ -70,7 +84,7 @@
     - name: Ensure services are started
       community.general.launchd:
         name: "{{ item }}"
-        state: started
+        state: "{{ state }}"
       loop:
         - accountingservice
         - adservice
