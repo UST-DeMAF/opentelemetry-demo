@@ -12,21 +12,9 @@
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_http }}"
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
-      FLAGD_HOST: "flagd" #TODO Beautify
-      FLAGD_PORT: "8013"
-      KAFKA_SERVICE_ADDR: "kafka:9092"
-      OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
-      PORT: "8080"
-      PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://localhost:8080/otlp-http/v1/traces"
-      LOCUST_WEB_PORT: "8089"
-      LOCUST_USERS: "10"
-      LOCUST_HOST: "http://frontendproxy:10000"
-      LOCUST_HEADLESS: "false"
-      LOCUST_AUTOSTART: "true"
-      LOCUST_BROWSER_TRAFFIC_ENABLED: "true"
-      PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: "python"
-      LOCUST_WEB_HOST: "0.0.0.0"
 
+      SHIPPING_SERVICE_PORT: "50050" # TODO beatuify
+      QUOTE_SERVICE_ADDR: "http://quoteservice:8090"
     restart_policy: unless-stopped
     memory: "{{ memory_limit }}"
     ports: "{{ ports }}"

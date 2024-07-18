@@ -1,0 +1,4 @@
+service_name: "mongo"
+image_name: "mongo:8.0.0-rc9"
+ports: "27017:27017"
+memory_limit: "256M"

@@ -1,0 +1,26 @@
+---
+- name: Pull the latest Docker image
+  docker_image:
+    name: "{{ image_name }}"
+    source: pull
+
+- name: Deploy Service
+  become: true
+  docker_container:
+    name: "{{ service_name }}"
+    image: "{{ image_name }}"
+    env:
+      METRICS_STORAGE_TYPE: "prometheus"
+    restart_policy: unless-stopped
+    command: "{{ command }}"
+    memory: "{{ memory_limit }}"
+    state: started
+    ports: "{{ ports }}"
+    network_mode: bridge
+    networks:
+      - name: opentelemetry-demo
+    log_driver: "json-file"
+    log_options:
+      max-size: "5m"
+      max-file: "2"
+      tag: "{{ service_name }}"

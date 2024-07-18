@@ -16,9 +16,10 @@
       ENVOY_PORT: "8080"
     restart_policy: unless-stopped
     volumes:
+      #TODO fix, this god knows why cannot be picked up during start of container, causing to crash the container
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /Users/p371728/master/demaf/opentelemetry-demo/ansible/roles/otelcol/files/otelcol-config.yml:/etc/otelcol-config.yml #TODO fix, this god knows why cannot be picked up during start of container, causing to crash the container
-      - /Users/p371728/master/demaf/opentelemetry-demo/ansible/roles/otelcol/files/otelcol-config-extras.yml:/etc/otelcol-config-extras.yml
+      - /Users/p371728/master/demaf/opentelemetry-demo/src/otelcollector/otelcol-config.yml:/etc/otelcol-config.yml # TODO Beautify
+      - /Users/p371728/master/demaf/opentelemetry-demo/src/otelcollector/otelcol-config-extras.yml:/etc/otelcol-config-extras.yml
     command: "{{ command }}"
     user: "{{ user }}"
     memory: "{{ memory_limit }}"

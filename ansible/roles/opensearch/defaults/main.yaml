@@ -1,0 +1,4 @@
+service_name: "opensearch"
+image_name: "opensearchproject/opensearch:2.14.0"
+memory_limit: "1G"
+ports: "9200"

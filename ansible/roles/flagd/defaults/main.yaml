@@ -1,0 +1,8 @@
+service_name: "flagd"
+demo_version: "1.10.0"
+image_name: "ghcr.io/open-feature/flagd:v0.10.2"
+ports: "8013:8013"
+otel_collector_host: "localhost"
+otel_collector_port_grpc: "4317"
+memory_limit: "50M"
+command: '["start", "--uri", "file:./etc/flagd/demo.flagd.json"]'

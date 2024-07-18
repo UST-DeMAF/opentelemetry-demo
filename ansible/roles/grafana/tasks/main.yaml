@@ -1,0 +1,28 @@
+---
+- name: Pull the latest Docker image
+  docker_image:
+    name: "{{ image_name }}"
+    source: pull
+
+- name: Deploy Service
+  become: true
+  docker_container:
+    name: "{{ service_name }}"
+    image: "{{ image_name }}"
+    env:
+      GF_INSTALL_PLUGINS: "grafana-opensearch-datasource"
+    restart_policy: unless-stopped
+    memory: "{{ memory_limit }}"
+    volumes:
+      - /Users/p371728/master/demaf/opentelemetry-demo/src/grafana/grafana.ini:/etc/grafana/grafana.ini # TODO Beautify
+      - /Users/p371728/master/demaf/opentelemetry-demo/src/grafana/provisioning/:/etc/grafana/provisioning/
+    state: started
+    ports: "{{ ports }}"
+    network_mode: bridge
+    networks:
+      - name: opentelemetry-demo
+    log_driver: "json-file"
+    log_options:
+      max-size: "5m"
+      max-file: "2"
+      tag: "{{ service_name }}"

@@ -2,4 +2,4 @@
 dependencies:
   - role: otelcol
   - role: flagd
-  - role: valkeycart
+  - role: productcatalogservice

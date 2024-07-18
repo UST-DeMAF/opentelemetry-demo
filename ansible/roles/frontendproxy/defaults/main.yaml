@@ -1,7 +1,9 @@
 service_name: "frontendproxy"
 demo_version: "1.10.0"
 image_name: "ghcr.io/open-telemetry/demo:1.10.0-frontendproxy"
-ports: "10000:10000"
+ports:
+  - "10000:10000"
+  #- "8080:8080"
 otel_collector_host: "localhost"
 otel_collector_port_http: "4318"
 otlp_metrics_temporality_preference : "cumulative"

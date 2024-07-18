@@ -29,19 +29,42 @@
       become: true
     - role: frauddetectionservice
       become: true
-    - role: kafka
-      become: true
-    - role: otelcol
+    - role: flagd
       become: true
     - role: frontend
       become: true
     - role: frontendproxy
       become: true
+    - role: grafana
+      become: true
     - role: imageprovider
+      become: true
+    - role: jaeger
+      become: true
+    - role: kafka
       become: true
     - role: loadgenerator
       become: true
-      #TODO Add other services here...
+    - role: mongo
+      become: true
+    - role: opensearch
+      become: true
+    - role: otelcol
+      become: true
+    - role: paymentservice
+      become: true
+    - role: productcatalogservice
+      become: true
+    - role: prometheus
+      become: true
+    - role: quoteservice
+      become: true
+    - role: recommendationservice
+      become: true
+    - role: shippingservice
+      become: true
+    - role: valkeycart
+      become: true
 
   post_tasks:
     - name: Ensure services are started
@@ -54,14 +77,25 @@
         - cartservice
         - checkoutservice
         - emailservice
+        - flagd
         - frauddetectionserice
         - frontend
         - frontendproxy
+        - grafana
         - imageprovider
+        - jaeger
         - kafka
-        - otelcol
         - loadgenerator
-        #TODO Add other services here...
+        - mongo
+        - opensearch
+        - otelcol
+        - paymentservice
+        - productcatalogservice
+        - prometheus
+        - quoteservice
+        - recommendationservice
+        - shippingservice
+        - valkeycart
 
     - name: Ensure services are enabled to start at boot
       community.general.launchd:
@@ -73,11 +107,22 @@
         - cartservice
         - checkoutservice
         - emailservice
+        - flagd
         - frauddetectionserice
         - frontend
         - frontendproxy
+        - grafana
         - imageprovider
+        - jaeger
         - kafka
         - loadgenerator
+        - mongo
+        - opensearch
         - otelcol
-        #TODO Add other services here...
+        - paymentservice
+        - productcatalogservice
+        - prometheus
+        - quoteservice
+        - recommendationservice
+        - shippingservice
+        - valkeycart

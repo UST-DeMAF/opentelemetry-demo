@@ -2,3 +2,4 @@
 dependencies:
   - role: otelcol
   - role: flagd
+  - role: mongo

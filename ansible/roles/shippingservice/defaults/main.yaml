@@ -1,0 +1,7 @@
+service_name: "shippingservice"
+demo_version: "1.10.0"
+image_name: "ghcr.io/open-telemetry/demo:1.10.0-shippingservice"
+ports: "50050:50050"
+otel_collector_host: "localhost"
+otel_collector_port_http: "4318"
+memory_limit: "20M"
