@@ -28,15 +28,15 @@
       RECOMMENDATION_SERVICE_ADDR: "recommendationservice:9001"
       SHIPPING_SERVICE_ADDR: "shippingservice:50050"
       ENV_PLATFORM: "local"
-      PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://localhost:8080/otlp-http/v1/traces"
+      PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://otelcol:8080/otlp-http/v1/traces"
       WEB_OTEL_SERVICE_NAME: "frontend-web"
-      OTEL_COLLECTOR_HOST: "localhost"
+      otel_collector_host: "otelcol"
 
     restart_policy: unless-stopped
     memory: "{{ memory_limit }}"
     ports: "{{ ports }}"
     state: started
-    network_mode: bridge
+    network_mode: opentelemetry-demo
     networks:
       - name: opentelemetry-demo
     log_driver: "json-file"

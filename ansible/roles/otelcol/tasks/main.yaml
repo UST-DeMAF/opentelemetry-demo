@@ -10,7 +10,7 @@
     name: "{{ service_name }}"
     image: "{{ image_name }}"
     env:
-      OTEL_COLLECTOR_HOST: "localhost"
+      OTEL_COLLECTOR_HOST: "otelcol"
       OTEL_COLLECTOR_PORT_GRPC: "4317"
       OTEL_COLLECTOR_PORT_HTTP: "4318"
       ENVOY_PORT: "8080"
@@ -25,7 +25,7 @@
     memory: "{{ memory_limit }}"
     state: started
     ports: "{{ ports }}"
-    network_mode: bridge
+    network_mode: opentelemetry-demo
     networks:
       - name: opentelemetry-demo
     log_driver: "json-file"

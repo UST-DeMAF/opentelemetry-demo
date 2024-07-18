@@ -19,7 +19,7 @@
     command: "{{ command }}"
     volumes:
       - /Users/p371728/master/demaf/opentelemetry-demo/src/flagd:/etc/flagd # TODO Beautify
-    network_mode: bridge
+    network_mode: opentelemetry-demo
     networks:
       - name: opentelemetry-demo
     log_driver: "json-file"

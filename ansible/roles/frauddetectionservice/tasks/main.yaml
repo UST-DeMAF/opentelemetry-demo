@@ -23,7 +23,7 @@
     restart_policy: unless-stopped
     memory: "{{ memory_limit }}"
     state: started
-    network_mode: bridge
+    network_mode: opentelemetry-demo
     networks:
       - name: opentelemetry-demo
     log_driver: "json-file"

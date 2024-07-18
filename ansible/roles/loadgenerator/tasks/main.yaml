@@ -17,7 +17,7 @@
       KAFKA_SERVICE_ADDR: "kafka:9092"
       OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
       PORT: "8080"
-      PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://localhost:8080/otlp-http/v1/traces"
+      PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://otelcol:8080/otlp-http/v1/traces"
       LOCUST_WEB_PORT: "8089"
       LOCUST_USERS: "10"
       LOCUST_HOST: "http://frontendproxy:10000"
@@ -31,7 +31,7 @@
     memory: "{{ memory_limit }}"
     ports: "{{ ports }}"
     state: started
-    network_mode: bridge
+    network_mode: opentelemetry-demo
     networks:
       - name: opentelemetry-demo
     log_driver: "json-file"

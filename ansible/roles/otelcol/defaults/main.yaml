@@ -2,8 +2,8 @@ service_name: "otelcol"
 demo_version: "1.10.0"
 image_name: "otel/opentelemetry-collector-contrib:0.104.0"
 memory_limit: "200M"
-command: '"--config=/etc/otelcol-config.yml", "--config=/etc/otelcol-config-extras.yml"'
+command: '"--config=/etc/otelcol-config.yml" "--config=/etc/otelcol-config-extras.yml"'
 user: "0:0"
 ports:
-  - "4317:4317"
-  - "4318:4318"
+  - "4317"
+  - "4318"

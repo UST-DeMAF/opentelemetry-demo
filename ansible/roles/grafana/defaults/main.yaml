@@ -1,4 +1,4 @@
 service_name: "grafana"
 image_name: "grafana/grafana:10.4.3"
 memory_limit: "100M"
-ports: "3001:3001" #TODO fix port
+ports: "3000"

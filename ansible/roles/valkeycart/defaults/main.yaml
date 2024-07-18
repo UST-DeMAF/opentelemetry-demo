@@ -1,6 +1,6 @@
 service_name: "valkeycart"
 demo_version: "1.10.0"
 image_name: "valkey/valkey:7.2-alpine"
-ports: "6379:6379"
+ports: "6379"
 memory_limit: "20M"
 user: "valkey"

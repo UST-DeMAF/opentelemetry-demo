@@ -10,22 +10,19 @@
     image: "{{ image_name }}"
     env:
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_http }}"
-      OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
-      OTEL_LOGS_EXPORTER: "{{ logs_exporter }}"
-
       CART_SERVICE_PORT: "7070" # TODO Beafutify
-      VALKEY_ADDR: "valkey-cart:6379"
+      VALKEY_ADDR: "valkeycart:6379"
+      REDIS_ADDR: "valkeycart:6379"
       ASPNETCORE_URLS: "http://*:7070"
       FLAGD_HOST: "flagd"
       FLAGD_PORT: "8013"
-      REDIS_ADDR: "redis-cart:6379"
     restart_policy: unless-stopped
     memory: "{{ memory_limit }}"
     state: started
     ports: "{{ ports }}"
-    network_mode: bridge
+    network_mode: opentelemetry-demo
     networks:
       - name: opentelemetry-demo
     log_driver: "json-file"

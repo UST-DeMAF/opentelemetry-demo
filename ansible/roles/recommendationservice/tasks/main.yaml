@@ -24,7 +24,7 @@
     memory: "{{ memory_limit }}"
     ports: "{{ ports }}"
     state: started
-    network_mode: bridge
+    network_mode: opentelemetry-demo
     networks:
       - name: opentelemetry-demo
     log_driver: "json-file"

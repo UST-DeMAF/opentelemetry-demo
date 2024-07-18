@@ -1,10 +1,9 @@
 service_name: "cartservice"
 demo_version: "1.10.0"
 image_name: "ghcr.io/open-telemetry/demo:1.10.0-cartservice"
-ports: "7070:7070"
-otel_collector_host: "localhost"
-otel_collector_port_http: "4318"
-otlp_metrics_temporality_preference : "cumulative"
+ports: "7070"
+otel_collector_host: "otelcol"
+otel_collector_port_http: "4317"
 memory_limit: "160M"
 
 logs_exporter: "otlp"

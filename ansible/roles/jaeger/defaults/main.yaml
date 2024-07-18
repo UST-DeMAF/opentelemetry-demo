@@ -7,5 +7,5 @@ command: '- "--memory.max-traces=5000"
       - "--prometheus.query.normalize-calls=true"
       - "--prometheus.query.normalize-duration=true"'
 ports:
-  - "16686:16686"
-  #- "4317:4317"
+  - "16686"
+  - "4317"
