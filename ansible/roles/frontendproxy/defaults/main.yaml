@@ -5,5 +5,5 @@ ports:
   - "10000:10000"
   - "8080:8080"
 otel_collector_host: "otelcol"
-otel_collector_port_http: "4318"
+otel_collector_port_grpc: "4317"
 memory_limit: "50M"

@@ -9,11 +9,9 @@
     name: "{{ service_name }}"
     image: "{{ image_name }}"
     env:
-      OTEL_EXPORTER_OTLP_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_http }}"
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_http }}/v1/traces"
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
-      VERSION: "{{ demo_version }}"
-
       EMAIL_SERVICE_PORT: "6060" # TODO Beautify
       APP_ENV: "production"
     restart_policy: unless-stopped

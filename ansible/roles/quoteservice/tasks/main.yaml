@@ -12,10 +12,9 @@
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_http }}"
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
-      OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
-      QUOTE_SERVICE_PORT: "8090" # TODO Beautify
       OTEL_PHP_AUTOLOAD_ENABLED: "true"
       OTEL_PHP_INTERNAL_METRICS_ENABLED: "true"
+      QUOTE_SERVICE_PORT: "8090" # TODO Beautify
     restart_policy: unless-stopped
     memory: "{{ memory_limit }}"
     ports: "{{ ports }}"

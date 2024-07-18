@@ -11,12 +11,11 @@
     env:
       KAFKA_SERVICE_ADDR: "{{ kafka_service_addr}}"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_http }}"
-      OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
       OTEL_RESOURCE_ATTRIBUTES: "service.name={{ service_name }},service.namespace=opentelemetry-demo,service.version={{ demo_version }}"
       OTEL_SERVICE_NAME: "{{ service_name }}"
 
       KAFKA_HEAP_OPTS: "-Xmx400m -Xms400m"
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092" #TODO beautify
     restart_policy: unless-stopped
     memory: "{{ memory_limit }}"
     state: started
