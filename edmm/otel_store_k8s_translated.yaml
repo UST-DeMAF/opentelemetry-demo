@@ -1461,6 +1461,13 @@ relations:
       target: "default-container-runtime"
       properties: []
       operations: []
+  - opentelemetry-demo-otelcol_ConnectsTo_opentelemetry-demo-jaeger:
+      type: "ConnectsTo"
+      description: null
+      source: "opentelemetry-demo-otelcol"
+      target: "opentelemetry-demo-jaeger"
+      properties: [ ]
+      operations: [ ]
   - opentelemetry-demo-productcatalogservice_ConnectsTo_opentelemetry-demo-mongo:
       type: "ConnectsTo"
       description: null
