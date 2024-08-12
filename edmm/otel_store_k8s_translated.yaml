@@ -1473,15 +1473,15 @@ relations:
       description: null
       source: "opentelemetry-demo-otelcol"
       target: "opentelemetry-demo-jaeger"
-      properties: [ ]
-      operations: [ ]
+      properties: []
+      operations: []
   - opentelemetry-demo-productcatalogservice_ConnectsTo_opentelemetry-demo-mongo:
       type: "ConnectsTo"
       description: null
       source: "opentelemetry-demo-productcatalogservice"
       target: "opentelemetry-demo-mongo"
-      properties: [ ]
-      operations: [ ]
+      properties: []
+      operations: []
   - opentelemetry-demo-loadgenerator_ConnectsTo_opentelemetry-demo-frontendproxy:
       type: "ConnectsTo"
       description: null
