@@ -1300,13 +1300,6 @@ relations:
       target: "default-operating-system"
       properties: []
       operations: []
-  - opentelemetry-demo-opensearch_HostedOn_default-container-runtime:
-      type: "HostedOn"
-      description: null
-      source: "opentelemetry-demo-opensearch"
-      target: "default-container-runtime"
-      properties: [ ]
-      operations: [ ]
   - opentelemetry-demo-accountingservice_HostedOn_default-container-runtime:
       type: "HostedOn"
       description: null
