@@ -1391,6 +1391,20 @@ relations:
       target: "default-container-runtime"
       properties: []
       operations: []
+  - opentelemetry-demo-mongo_HostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "opentelemetry-demo-mongo"
+      target: "default-container-runtime"
+      properties: [ ]
+      operations: [ ]
+  - opentelemetry-demo-jaeger_HostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "opentelemetry-demo-jaeger"
+      target: "default-container-runtime"
+      properties: [ ]
+      operations: [ ]
   - opentelemetry-demo-loadgenerator_HostedOn_default-container-runtime:
       type: "HostedOn"
       description: null
@@ -1447,6 +1461,13 @@ relations:
       target: "default-container-runtime"
       properties: []
       operations: []
+  - opentelemetry-demo-productcatalogservice_ConnectsTo_opentelemetry-demo-mongo:
+      type: "ConnectsTo"
+      description: null
+      source: "opentelemetry-demo-productcatalogservice"
+      target: "opentelemetry-demo-mongo"
+      properties: [ ]
+      operations: [ ]
   - opentelemetry-demo-loadgenerator_ConnectsTo_opentelemetry-demo-frontendproxy:
       type: "ConnectsTo"
       description: null
@@ -1639,6 +1660,146 @@ component_types:
             type: "STRING"
             required: false
       operations: [ ]
+  - name: opentelemetry-demo-mongo-type
+    extends:
+    properties:
+      - key: port
+        type: INTEGER
+        value: 8080
+        required: true
+      - key: MONGO_HOST
+        type: STRING
+        value: "'opentelemetry-demo-mongo'"
+        required: true
+      - key: PRODUCT_CATALOG_SERVICE_PORT
+        type: STRING
+        value: "8080"
+        required: true
+      - key: MONGO_PASSWORD
+        type: STRING
+        value: "'mongo_product_catalog'"
+        required: true
+      - key: FLAGD_PORT
+        type: STRING
+        value: "8013"
+        required: true
+      - key: OTEL_EXPORTER_OTLP_ENDPOINT
+        type: STRING
+        value: "http://$(OTEL_COLLECTOR_NAME):4317"
+        required: true
+      - key: OTEL_RESOURCE_ATTRIBUTES
+        type: STRING
+        value: "service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.10.0"
+        required: true
+      - key: MONGO_PORT
+        type: STRING
+        value: "'27017'"
+        required: true
+      - key: OTEL_COLLECTOR_NAME
+        type: STRING
+        value: "'opentelemetry-demo-otelcol'"
+        required: true
+      - key: MONGO_USERNAME
+        type: STRING
+        value: "'mongo'"
+        required: true
+      - key: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
+        type: STRING
+        value: "cumulative"
+        required: true
+      - key: FLAGD_HOST
+        type: STRING
+        value: "'opentelemetry-demo-flagd'"
+        required: true
+      - key: tcp-service
+        type: STRING
+        value: "8080:8080"
+        required: true
+    operations: []
+  - name: opentelemetry-demo-jaeger-type
+    extends:
+    properties:
+      - key: container_port
+        type: INTEGER
+        value: 5775
+        required: true
+      - key: container_port
+        type: INTEGER
+        value: 6831
+        required: true
+      - key: container_port
+        type: INTEGER
+        value: 6832
+        required: true
+      - key: container_port
+        type: INTEGER
+        value: 5778
+        required: true
+      - key: container_port
+        type: INTEGER
+        value: 9411
+        required: true
+      - key: container_port
+        type: INTEGER
+        value: 16685
+        required: true
+      - key: container_port
+        type: INTEGER
+        value: 4317
+        required: true
+      - key: container_port
+        type: INTEGER
+        value: 16686
+        required: true
+      - key: container_port
+        type: INTEGER
+        value: 4318
+        required: true
+      - key: SPAN_STORAGE_TYPE
+        type: STRING
+        value: "memory"
+        required: true
+      - key: COLLECTOR_ZIPKIN_HOST_PORT
+        type: STRING
+        value: ":9411"
+        required: true
+      - key: COLLECTOR_OTLP_ENABLED
+        type: STRING
+        value: "true"
+        required: true
+      - key: METRICS_STORAGE_TYPE
+        type: STRING
+        value: "prometheus"
+        required: true
+      - key: JAEGER_DISABLED
+        type: STRING
+        value: "false"
+        required: true
+      - key: grpc-query
+        type: STRING
+        value: "16685:16685"
+        required: true
+      - key: http-query
+        type: STRING
+        value: "16686:16686"
+        required: true
+      - key: otlp-http
+        type: STRING
+        value: "4318:4318"
+        required: true
+      - key: jaeger-compact
+        type: STRING
+        value: "6831:6831"
+        required: true
+      - key: zipkin
+        type: STRING
+        value: "9411:9411"
+        required: true
+      - key: otlp
+        type: STRING
+        value: "4317:4317"
+        required: true
+    operations: []
   - name: opentelemetry-demo-currencyservice-type
     extends:
     properties:
