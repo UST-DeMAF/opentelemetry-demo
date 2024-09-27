@@ -7,6 +7,11 @@ on:
       - demaf
       - ES-86
 
+env:
+  IMAGE_URL: ghcr.io/ust-demaf
+  IMAGE_NAME: productcatalogservice
+  IMAGE_TAG: 1.11.1
+
 jobs:
   build-using-dockerfile-push-2-ghcr:
     runs-on: ubuntu-latest
@@ -35,6 +40,6 @@ jobs:
           file: ./src/productcatalogservice/Dockerfile
           platforms: linux/amd64, linux/arm64
           push: true
-          tags: ghcr.io/ust-demaf/productcatalogservice:latest
+          tags: ${{ env.IMAGE_URL }}/demo:${{ env.IMAGE_TAG }}-${{ env.IMAGE_NAME }}
           provenance: false
 
