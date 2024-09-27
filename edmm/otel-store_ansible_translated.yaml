@@ -518,18 +518,18 @@ components:
         - Pull the latest Docker image:
             artifatcs:
               - docker_image:
-                  name: "ghcr.io/open-telemetry/demo:1.11.1-productcatalogservice:1.11.1-productcatalogservice"
+                  name: "ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice:1.11.1-productcatalogservice"
                   fileURI: "-"
               - bash:
-                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-productcatalogservice:1.11.1-productcatalogservice"
+                  name: "/bin/sh docker pull ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice:1.11.1-productcatalogservice"
                   fileURI: "-"
         - Deploy Service:
             artifatcs:
               - docker_image:
-                  name: "ghcr.io/open-telemetry/demo:1.11.1-productcatalogservice"
+                  name: "ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice"
                   fileURI: "-"
               - bash:
-                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-productcatalogservice"
+                  name: "/bin/sh docker run ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice"
                   fileURI: "-"
       artifacts: []
   - opensearch:

@@ -37,7 +37,7 @@ resource "docker_network" "open-telemetry-network" {
 # accounting service container
 resource "docker_container" "accountingservice" {
   name       = "accounting-service"
-  image      = "ghcr.io/open-telemetry/demo:latest-accountingservice"
+  image      = "ghcr.io/open-telemetry/demo:1.11.1-accountingservice"
   depends_on = [docker_container.otelcol, docker_container.kafka]
   network_mode = "bridge"
   networks_advanced {
@@ -58,7 +58,7 @@ resource "docker_container" "accountingservice" {
 #ad service container
 resource "docker_container" "adservice" {
   name       = "ad-service"
-  image      = "ghcr.io/open-telemetry/demo:latest-adservice"
+  image      = "ghcr.io/open-telemetry/demo:1.11.1-adservice"
   depends_on = [docker_container.otelcol, docker_container.flagd]
   network_mode = "bridge"
   networks_advanced {
@@ -86,7 +86,7 @@ resource "docker_container" "adservice" {
 
 resource "docker_container" "cartservice" {
   name       = "cart-service"
-  image      = "ghcr.io/open-telemetry/demo:latest-cartservice"
+  image      = "ghcr.io/open-telemetry/demo:1.11.1-cartservice"
   depends_on = [docker_container.valkey-cart, docker_container.otelcol, docker_container.flagd]
   network_mode = "bridge"
   networks_advanced {
@@ -115,7 +115,7 @@ resource "docker_container" "cartservice" {
 
 resource "docker_container" "checkoutservice" {
   name  = "checkout-service"
-  image = "ghcr.io/open-telemetry/demo:latest-checkoutservice"
+  image = "ghcr.io/open-telemetry/demo:1.11.1-checkoutservice"
   depends_on = [docker_container.cartservice,
     docker_container.currencyservice,
     docker_container.emailservice,
@@ -158,7 +158,7 @@ resource "docker_container" "checkoutservice" {
 
 resource "docker_container" "currencyservice" {
   name       = "currency-service"
-  image      = "ghcr.io/open-telemetry/demo:latest-currencyservice"
+  image      = "ghcr.io/open-telemetry/demo:1.11.1-currencyservice"
   depends_on = [docker_container.otelcol]
   network_mode = "bridge"
   networks_advanced {
@@ -183,7 +183,7 @@ resource "docker_container" "currencyservice" {
 
 resource "docker_container" "emailservice" {
   name       = "email-service"
-  image      = "ghcr.io/open-telemetry/demo:latest-emailservice"
+  image      = "ghcr.io/open-telemetry/demo:1.11.1-emailservice"
   depends_on = [docker_container.otelcol]
   network_mode = "bridge"
   networks_advanced {
@@ -209,7 +209,7 @@ resource "docker_container" "emailservice" {
 
 resource "docker_container" "frauddetectionservice" {
   name       = "frauddetection-service"
-  image      = "ghcr.io/open-telemetry/demo:latest-frauddetectionservice"
+  image      = "ghcr.io/open-telemetry/demo:1.11.1-frauddetectionservice"
   depends_on = [docker_container.otelcol, docker_container.kafka]
   network_mode = "bridge"
   networks_advanced {
@@ -236,7 +236,7 @@ resource "docker_container" "frauddetectionservice" {
 
 resource "docker_container" "frontend" {
   name  = "frontend"
-  image = "ghcr.io/open-telemetry/demo:latest-frontend"
+  image = "ghcr.io/open-telemetry/demo:1.11.1-frontend"
   depends_on = [docker_container.adservice,
     docker_container.cartservice,
     docker_container.checkoutservice,
@@ -285,7 +285,7 @@ resource "docker_container" "frontend" {
 
 resource "docker_container" "frontendproxy" {
   name  = "frontend-proxy"
-  image = "ghcr.io/open-telemetry/demo:latest-frontendproxy"
+  image = "ghcr.io/open-telemetry/demo:1.11.1-frontendproxy"
   depends_on = [docker_container.frontend,
     docker_container.loadgenerator,
     docker_container.jaeger,
@@ -331,7 +331,7 @@ resource "docker_container" "frontendproxy" {
 
 resource "docker_container" "imageprovider" {
   name       = "image-provider"
-  image      = "ghcr.io/open-telemetry/demo:latest-imageprovider"
+  image      = "ghcr.io/open-telemetry/demo:1.11.1-imageprovider"
   depends_on = [docker_container.otelcol]
   network_mode = "bridge"
   networks_advanced {
@@ -357,7 +357,7 @@ resource "docker_container" "imageprovider" {
 
 resource "docker_container" "loadgenerator" {
   name  = "load-generator"
-  image = "ghcr.io/open-telemetry/demo:latest-loadgenerator"
+  image = "ghcr.io/open-telemetry/demo:1.11.1-loadgenerator"
   depends_on = [docker_container.frontend,
   docker_container.flagd]
   network_mode = "bridge"
@@ -393,7 +393,7 @@ resource "docker_container" "loadgenerator" {
 
 resource "docker_container" "paymentservice" {
   name  = "payment-service"
-  image = "ghcr.io/open-telemetry/demo:latest-paymentservice"
+  image = "ghcr.io/open-telemetry/demo:1.11.1-paymentservice"
   depends_on = [docker_container.otelcol,
   docker_container.flagd]
   network_mode = "bridge"
@@ -422,7 +422,7 @@ resource "docker_container" "paymentservice" {
 
 resource "docker_container" "productcatalogservice" {
   name  = "product-catalog-service"
-  image = "ghcr.io/open-telemetry/demo:latest-productcatalogservice"
+  image = "ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice"
   depends_on = [docker_container.otelcol,
     docker_container.flagd,
   docker_container.mongodb-catalog]
@@ -455,7 +455,7 @@ resource "docker_container" "productcatalogservice" {
 
 resource "docker_container" "quoteservice" {
   name       = "quote-service"
-  image      = "ghcr.io/open-telemetry/demo:latest-quoteservice"
+  image      = "ghcr.io/open-telemetry/demo:1.11.1-quoteservice"
   depends_on = [docker_container.otelcol]
   network_mode = "bridge"
   networks_advanced {
@@ -482,7 +482,7 @@ resource "docker_container" "quoteservice" {
 
 resource "docker_container" "recommendationservice" {
   name  = "recommendation-service"
-  image = "ghcr.io/open-telemetry/demo:latest-recommendationservice"
+  image = "ghcr.io/open-telemetry/demo:1.11.1-recommendationservice"
   depends_on = [docker_container.productcatalogservice,
     docker_container.otelcol,
     docker_container.flagd
@@ -516,7 +516,7 @@ resource "docker_container" "recommendationservice" {
 
 resource "docker_container" "shippingservice" {
   name       = "shipping-service"
-  image      = "ghcr.io/open-telemetry/demo:latest-shippingservice"
+  image      = "ghcr.io/open-telemetry/demo:1.11.1-shippingservice"
   depends_on = [docker_container.otelcol]
   network_mode = "bridge"
   networks_advanced {
@@ -574,7 +574,7 @@ resource "docker_container" "flagd" {
 
 resource "docker_container" "kafka" {
   name    = "kafka"
-  image   = "ghcr.io/open-telemetry/demo:latest-kafka"
+  image   = "ghcr.io/open-telemetry/demo:1.11.1-kafka"
   memory  = 600
   network_mode = "bridge"
   networks_advanced {

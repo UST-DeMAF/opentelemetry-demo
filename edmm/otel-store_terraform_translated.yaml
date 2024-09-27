@@ -16,7 +16,7 @@ components:
         - network_mode: "bridge"
         - hostname: "recommendationservice"
         - restart: "unless-stopped"
-        - image: "ghcr.io/open-telemetry/demo:latest-recommendationservice"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-recommendationservice"
         - networks_advanced.name: "docker_network.open-telemetry-network.name"
         - ports.internal: "9001"
       operations: []
@@ -29,7 +29,7 @@ components:
             \ OTEL_RESOURCE_ATTRIBUTES=ervice.namespace=opentelemetry-demo, service.version=1.11.1,\
             \ service.name=currencyservice]"
         - name: "currency-service"
-        - image: "ghcr.io/open-telemetry/demo:latest-currencyservice"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-currencyservice"
         - hostname: "currencyservice"
         - network_mode: "bridge"
         - memory: "20"
@@ -50,7 +50,7 @@ components:
         - env: "[APP_ENV=production, EMAIL_SERVICE_PORT=6060, OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces,\
             \ OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo, service.version=1.11.1,\
             \ OTEL_SERVICE_NAME=emailservice]"
-        - image: "ghcr.io/open-telemetry/demo:latest-emailservice"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-emailservice"
         - depends_on: "[otelcol]"
         - restart: "unless-stopped"
         - ports.internal: "6060"
@@ -90,7 +90,7 @@ components:
             \ service.version=1.11.1, ENVOY_PORT=8080, FLAGD_HOST=flagd, FLAGD_PORT=8013]"
         - depends_on: "[frontend, loadgenerator, jaeger, grafana]"
         - restart: "unless-stopped"
-        - image: "ghcr.io/open-telemetry/demo:latest-frontendproxy"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-frontendproxy"
         - memory: "50"
         - networks_advanced.name: "docker_network.open-telemetry-network.name"
         - ports.internal: "8080"
@@ -105,7 +105,7 @@ components:
       properties:
         - name: "ad-service"
         - depends_on: "[otelcol, flagd]"
-        - image: "ghcr.io/open-telemetry/demo:latest-adservice"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-adservice"
         - memory: "300"
         - network_mode: "bridge"
         - env: "[AD_SERVICE_PORT=9555, FLAGD_HOST=flagd, FLAGD_PORT=8013, OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318,\
@@ -122,7 +122,7 @@ components:
       description: null
       properties:
         - name: "payment-service"
-        - image: "ghcr.io/open-telemetry/demo:latest-paymentservice"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-paymentservice"
         - depends_on: "[otelcol, flagd]"
         - env: "[PAYMENT_SERVICE_PORT=50051, FLAGD_HOST=flagd, FLAGD_PORT=8013, OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317,\
             \ OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
@@ -143,7 +143,7 @@ components:
             \ OTEL_SERVICE_NAME=imageprovider, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
             \ service.version=1.11.1]"
         - name: "image-provider"
-        - image: "ghcr.io/open-telemetry/demo:latest-imageprovider"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-imageprovider"
         - network_mode: "bridge"
         - memory: "120"
         - depends_on: "[otelcol]"
@@ -184,7 +184,7 @@ components:
             \ service.version=1.11.1, OTEL_SERVICE_NAME=kafka, KAFKA_HEAP_OPTS=-Xmx400m\
             \ -Xms400m]"
         - name: "kafka"
-        - image: "ghcr.io/open-telemetry/demo:latest-kafka"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-kafka"
         - network_mode: "bridge"
         - restart: "unless-stopped"
         - healthcheck.test: "nc -z kafka 9092"
@@ -206,7 +206,7 @@ components:
             \ OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo, service.version=1.11.1,\
             \ OTEL_SERVICE_NAME=loadgenerator, PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python,\
             \ LOCUST_WEB_HOST=0.0.0.0, FLAGD_HOST=flagd, FLAGD_PORT=8013]"
-        - image: "ghcr.io/open-telemetry/demo:latest-loadgenerator"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-loadgenerator"
         - memory: "1000"
         - name: "load-generator"
         - depends_on: "[frontend, flagd]"
@@ -245,7 +245,7 @@ components:
             \ OTEL_SERVICE_NAME=productcatalogservice, MONGO_USERNAME=mongo, MONGO_PASSWORD=mongo_product_catalog,\
             \ MONGO_HOSTNAME=mongo, MONGO_PORT=27017]"
         - hostname: "productcatalogservice"
-        - image: "ghcr.io/open-telemetry/demo:latest-productcatalogservice"
+        - image: "ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice"
         - depends_on: "[otelcol, flagd, mongodb-catalog]"
         - name: "product-catalog-service"
         - network_mode: "bridge"
@@ -307,7 +307,7 @@ components:
             \ OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo, service.version=1.11.1,\
             \ OTEL_SERVICE_NAME=frauddetectionservice]"
         - hostname: "frauddetectionservice"
-        - image: "ghcr.io/open-telemetry/demo:latest-frauddetectionservice"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-frauddetectionservice"
         - restart: "unless-stopped"
         - networks_advanced.name: "docker_network.open-telemetry-network.name"
       operations: []
@@ -316,7 +316,7 @@ components:
       type: "docker_container"
       description: null
       properties:
-        - image: "ghcr.io/open-telemetry/demo:latest-quoteservice"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-quoteservice"
         - env: "[OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318, OTEL_PHP_AUTOLOAD_ENABLED=true,\
             \ QUOTE_SERVICE_PORT=8090, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
             \ service.version=1.11.1, OTEL_SERVICE_NAME=quoteservice, OTEL_PHP_INTERNAL_METRICS_ENABLED=true]"
@@ -335,7 +335,7 @@ components:
       description: null
       properties:
         - depends_on: "[valkey-cart, otelcol, flagd]"
-        - image: "ghcr.io/open-telemetry/demo:latest-cartservice"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-cartservice"
         - name: "cart-service"
         - network_mode: "bridge"
         - hostname: "cartservice"
@@ -378,7 +378,7 @@ components:
         - hostname: "shippingservice"
         - depends_on: "[otelcol]"
         - restart: "unless-stopped"
-        - image: "ghcr.io/open-telemetry/demo:latest-shippingservice"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-shippingservice"
         - networks_advanced.name: "docker_network.open-telemetry-network.name"
         - ports.internal: "50050"
       operations: []
@@ -416,7 +416,7 @@ components:
       properties:
         - depends_on: "[otelcol, kafka]"
         - hostname: "accountingservice"
-        - image: "ghcr.io/open-telemetry/demo:latest-accountingservice"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-accountingservice"
         - name: "accounting-service"
         - network_mode: "bridge"
         - memory: "120"
@@ -433,7 +433,7 @@ components:
       properties:
         - name: "checkout-service"
         - hostname: "checkoutservice"
-        - image: "ghcr.io/open-telemetry/demo:latest-checkoutservice"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-checkoutservice"
         - env: "[FLAGD_HOST=flagd, FLAGD_PORT=8013, CHECKOUT_SERVICE_PORT=5050, CART_SERVICE_ADDR=cartservice:7070,\
             \ CURRENCY_SERVICE_ADDR=currencyservice:7001, EMAIL_SERVICE_ADDR=http://emailservice:6060,\
             \ PAYMENT_SERVICE_ADDR=paymentservice:50051, PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550,\
@@ -480,7 +480,7 @@ components:
         - depends_on: "[adservice, cartservice, checkoutservice, currencyservice,\
             \ productcatalogservice, quoteservice, recommendationservice, shippingservice,\
             \ otelcol, imageprovider, flagd]"
-        - image: "ghcr.io/open-telemetry/demo:latest-frontend"
+        - image: "ghcr.io/open-telemetry/demo:1.11.1-frontend"
         - memory: "250"
         - network_mode: "bridge"
         - env: "[PORT=8080, FRONTEND_ADDR=frontend:8080, AD_SERVICE_ADDR=adservice:9555,\

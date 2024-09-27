@@ -237,7 +237,7 @@ components:
       operations: []
       artifacts:
         - docker_image:
-            name: "ghcr.io/open-telemetry/demo:1.11.1-productcatalogservice"
+            name: "ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice"
             fileURI: "-"
   - opentelemetry-demo-grafana:
       type: "opentelemetry-demo-grafana-type"
