@@ -1,5 +1,5 @@
 service_name: "recommendationservice"
-image_name: "ghcr.io/open-telemetry/demo:1.10.0-recommendationservice"
+image_name: "ghcr.io/open-telemetry/demo:1.11.1-recommendationservice"
 ports: "9001"
 otlp_metrics_temporality_preference : "cumulative"
 memory_limit: "40M"

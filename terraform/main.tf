@@ -44,13 +44,13 @@ resource "docker_container" "accountingservice" {
     name = docker_network.open-telemetry-network.name
   }
   hostname = "accountingservice"
-  memory     = 50
+  memory     = 120
   restart    = "unless-stopped"
   env = [
     "KAFKA_SERVICE_ADDR=kafka:9092",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318",
     "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=Cumulative",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=accountingservice"
   ]
 }
@@ -76,7 +76,7 @@ resource "docker_container" "adservice" {
     "FLAGD_PORT=8013",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318",
     "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=Cumulative",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_LOGS_EXPORTER=otlp",
     "OTEL_SERVICE_NAME=adservice"
   ]
@@ -104,7 +104,7 @@ resource "docker_container" "cartservice" {
     "FLAGD_PORT=8013",
     "VALKEY_ADDR=valkey-cart:6379",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=cartservice",
     "ASPNETCORE_URLS=http://*:7070"
   ]
@@ -147,7 +147,7 @@ resource "docker_container" "checkoutservice" {
     "KAFKA_SERVICE_ADDR=kafka:9092",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317",
     "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=Cumulative",
-    "OTEL_RESOURCE_ATTRIBUTES=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=checkoutservice"
 
   ]
@@ -172,9 +172,9 @@ resource "docker_container" "currencyservice" {
   }
   env = [
     "CURRENCY_SERVICE_PORT=7001",
-    "VERSION=1.11.0",
+    "VERSION=1.11.1",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317",
-    "OTEL_RESOURCE_ATTRIBUTES=ervice.namespace=opentelemetry-demo,service.version=1.11.0,service.name=currencyservice"
+    "OTEL_RESOURCE_ATTRIBUTES=ervice.namespace=opentelemetry-demo,service.version=1.11.1,service.name=currencyservice"
   ]
 
 }
@@ -199,7 +199,7 @@ resource "docker_container" "emailservice" {
     "APP_ENV=production",
     "EMAIL_SERVICE_PORT=6060",
     "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=emailservice"
   ]
 
@@ -226,7 +226,7 @@ resource "docker_container" "frauddetectionservice" {
     "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=Cumulative",
     "OTEL_INSTRUMENTATION_KAFKA_EXPERIMENTAL_SPAN_ATTRIBUTES=true",
     "OTEL_INSTRUMENTATION_MESSAGING_EXPERIMENTAL_RECEIVE_TELEMETRY_ENABLED=true",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=frauddetectionservice"
   ]
 
@@ -269,7 +269,7 @@ resource "docker_container" "frontend" {
     "RECOMMENDATION_SERVICE_ADDR=recommendationservice:9001",
     "SHIPPING_SERVICE_ADDR=shippingservice:50050",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "ENV_PLATFORM=local",
     "OTEL_SERVICE_NAME=frontend",
     "PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://localhost:8080/otlp-http/v1/traces",
@@ -319,7 +319,7 @@ resource "docker_container" "frontendproxy" {
     "IMAGE_PROVIDER_PORT=8081",
     "OTEL_COLLECTOR_PORT_GRPC=4317",
     "OTEL_COLLECTOR_PORT_HTTP=4318",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "ENVOY_PORT=8080",
     "FLAGD_HOST=flagd",
     "FLAGD_PORT=8013"
@@ -348,7 +348,7 @@ resource "docker_container" "imageprovider" {
     "OTEL_COLLECTOR_HOST=otelcol",
     "OTEL_COLLECTOR_PORT_GRPC=4317",
     "OTEL_SERVICE_NAME=imageprovider",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0"
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1"
   ]
 
 }
@@ -379,7 +379,7 @@ resource "docker_container" "loadgenerator" {
     "LOCUST_BROWSER_TRAFFIC_ENABLED=true",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317",
     "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=loadgenerator",
     "PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python",
     "LOCUST_WEB_HOST=0.0.0.0",
@@ -412,7 +412,7 @@ resource "docker_container" "paymentservice" {
     "FLAGD_PORT=8013",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317",
     "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=paymentservice"
   ]
 
@@ -442,7 +442,7 @@ resource "docker_container" "productcatalogservice" {
     "FLAGD_PORT=8013",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317",
     "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=productcatalogservice",
     "MONGO_USERNAME=mongo",
     "MONGO_PASSWORD=mongo_product_catalog",
@@ -471,7 +471,7 @@ resource "docker_container" "quoteservice" {
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318",
     "OTEL_PHP_AUTOLOAD_ENABLED=true",
     "QUOTE_SERVICE_PORT=8090",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=quoteservice",
     "OTEL_PHP_INTERNAL_METRICS_ENABLED=true"
   ]
@@ -505,7 +505,7 @@ resource "docker_container" "recommendationservice" {
     "OTEL_PYTHON_LOG_CORRELATION=true",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317",
     "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=recommendationservice",
     "PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python"
   ]
@@ -532,7 +532,7 @@ resource "docker_container" "shippingservice" {
     "SHIPPING_SERVICE_PORT=50050",
     "QUOTE_SERVICE_ADDR=http://quoteservice:8090",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=shippingservice"
   ]
 }
@@ -543,12 +543,12 @@ resource "docker_container" "shippingservice" {
 
 resource "docker_container" "flagd" {
   name   = "flagd"
-  image  = "ghcr.io/open-feature/flagd:v0.10.2"
+  image  = "ghcr.io/open-feature/flagd:v0.11.2"
   memory = 50
   env = [
     "FLAGD_OTEL_COLLECTOR_URI=otelcol:4317",
     "FLAGD_METRICS_EXPORTER=otel",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=flagd"
   ]
   network_mode = "bridge"
@@ -588,7 +588,7 @@ resource "docker_container" "kafka" {
     "KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318",
     "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative",
-    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.0",
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
     "OTEL_SERVICE_NAME=kafka",
     "KAFKA_HEAP_OPTS=-Xmx400m -Xms400m"
   ]
@@ -606,7 +606,7 @@ resource "docker_container" "kafka" {
 
 resource "docker_container" "valkey-cart" {
   name    = "valkey-cart"
-  image   = "valkey/valkey:7.2-alpine"
+  image   = "valkey/valkey:8.0-alpine"
   user    = "valkey"
   memory  = 20
   restart = "unless-stopped"
@@ -656,7 +656,7 @@ resource "docker_container" "mongodb-catalog" {
 
 resource "docker_container" "jaeger" {
   name  = "jaeger"
-  image = "jaegertracing/all-in-one:1.57"
+  image = "jaegertracing/all-in-one:1.60"
   command = [
     "--memory.max-traces=5000",
     "--query.base-path=/jaeger/ui",
@@ -685,7 +685,7 @@ resource "docker_container" "jaeger" {
 
 resource "docker_container" "grafana" {
   name    = "grafana"
-  image   = "grafana/grafana:10.4.3"
+  image   = "grafana/grafana:11.2.0"
   network_mode = "bridge"
   networks_advanced {
     name = docker_network.open-telemetry-network.name
@@ -754,7 +754,7 @@ resource "docker_container" "otelcol" {
 
 resource "docker_container" "prometheus" {
   name  = "prometheus"
-  image = "quay.io/prometheus/prometheus:v2.52.0"
+  image = "quay.io/prometheus/prometheus:v2.54.1"
   command = ["--web.console.templates=/etc/prometheus/consoles", 
     "--web.console.libraries=/etc/prometheus/console_libraries", 
     "--storage.tsdb.retention.time=1h",
@@ -785,7 +785,7 @@ resource "docker_container" "prometheus" {
 
 resource "docker_container" "opensearch" {
   name    = "opensearch"
-  image   = "opensearchproject/opensearch:1.2.0"
+  image   = "opensearchproject/opensearch:2.16.0"
   network_mode = "bridge"
   networks_advanced {
     name = docker_network.open-telemetry-network.name

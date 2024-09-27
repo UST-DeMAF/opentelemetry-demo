@@ -1,5 +1,5 @@
 service_name: "jaeger"
-image_name: "jaegertracing/all-in-one:1.57"
+image_name: "jaegertracing/all-in-one:1.60"
 memory_limit: "400M"
 command: '- "--memory.max-traces=5000"
       - "--query.base-path=/jaeger/ui"

@@ -1,5 +1,5 @@
 service_name: "frontend"
-image_name: "ghcr.io/open-telemetry/demo:1.10.0-frontend"
+image_name: "ghcr.io/open-telemetry/demo:1.11.1-frontend"
 ports: "8080"
 otlp_metrics_temporality_preference : "cumulative"
 memory_limit: "250M"

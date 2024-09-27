@@ -3,7 +3,7 @@
   hosts: all
   become: true
   vars:
-    demo_version: "1.10.0"
+    demo_version: "1.11.1"
     network_name: "opentelemetry-demo"
     state: "started"
     restart_policy: "unless-stopped"

@@ -1,5 +1,5 @@
 service_name: "loadgenerator"
-image_name: "ghcr.io/open-telemetry/demo:1.10.0-loadgenerator"
+image_name: "ghcr.io/open-telemetry/demo:1.11.1-loadgenerator"
 ports: "8089"
 otlp_metrics_temporality_preference : "cumulative"
 memory_limit: "1G"

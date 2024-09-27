@@ -1,5 +1,5 @@
 service_name: "prometheus"
-image_name: "quay.io/prometheus/prometheus:v2.52.0"
+image_name: "quay.io/prometheus/prometheus:v2.54.1"
 memory_limit: "300M"
 ports: "9090:9090"
 command: "--web.console.templates=/etc/prometheus/consoles

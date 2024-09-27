@@ -1,5 +1,5 @@
 service_name: "accountingservice"
-image_name: "ghcr.io/open-telemetry/demo:1.10.0-accountingservice"
+image_name: "ghcr.io/open-telemetry/demo:1.11.1-accountingservice"
 otlp_metrics_temporality_preference : "cumulative"
-memory_limit: "50M"
+memory_limit: "120M"
 kafkaservice_addr: "kafka:9092"
