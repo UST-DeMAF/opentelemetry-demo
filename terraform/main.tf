@@ -712,7 +712,7 @@ resource "docker_container" "grafana" {
 
 resource "docker_container" "otelcol" {
   name       = "otel-col"
-  image      = "otel/opentelemetry-collector-contrib:0.102.1"
+  image      = "otel/opentelemetry-collector-contrib:0.108.0"
   depends_on = [docker_container.jaeger]
   network_mode = "bridge"
   networks_advanced {

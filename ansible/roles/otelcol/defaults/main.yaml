@@ -1,5 +1,5 @@
 service_name: "otelcol"
-image_name: "otel/opentelemetry-collector-contrib:0.104.0"
+image_name: "otel/opentelemetry-collector-contrib:0.108.0"
 memory_limit: "200M"
 command: '"--config=/etc/otelcol-config.yml" "--config=/etc/otelcol-config-extras.yml"'
 user: "0:0"
