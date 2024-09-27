@@ -1,0 +1,1152 @@
+---
+properties: []
+components:
+  - recommendationservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - memory: "500"
+        - env: "[RECOMMENDATION_SERVICE_PORT=9001, PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550,\
+            \ FLAGD_HOST=flagd, FLAGD_PORT=8013, OTEL_PYTHON_LOG_CORRELATION=true,\
+            \ OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317, OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative,\
+            \ OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo, service.version=1.11.1,\
+            \ OTEL_SERVICE_NAME=recommendationservice, PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python]"
+        - name: "recommendation-service"
+        - depends_on: "[productcatalogservice, otelcol, flagd]"
+        - network_mode: "bridge"
+        - hostname: "recommendationservice"
+        - restart: "unless-stopped"
+        - image: "ghcr.io/open-telemetry/demo:latest-recommendationservice"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "9001"
+      operations: []
+      artifacts: []
+  - currencyservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - env: "[CURRENCY_SERVICE_PORT=7001, VERSION=1.11.1, OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317,\
+            \ OTEL_RESOURCE_ATTRIBUTES=ervice.namespace=opentelemetry-demo, service.version=1.11.1,\
+            \ service.name=currencyservice]"
+        - name: "currency-service"
+        - image: "ghcr.io/open-telemetry/demo:latest-currencyservice"
+        - hostname: "currencyservice"
+        - network_mode: "bridge"
+        - memory: "20"
+        - depends_on: "[otelcol]"
+        - restart: "unless-stopped"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "7001"
+      operations: []
+      artifacts: []
+  - emailservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - memory: "100"
+        - name: "email-service"
+        - network_mode: "bridge"
+        - hostname: "emailservice"
+        - env: "[APP_ENV=production, EMAIL_SERVICE_PORT=6060, OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces,\
+            \ OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo, service.version=1.11.1,\
+            \ OTEL_SERVICE_NAME=emailservice]"
+        - image: "ghcr.io/open-telemetry/demo:latest-emailservice"
+        - depends_on: "[otelcol]"
+        - restart: "unless-stopped"
+        - ports.internal: "6060"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+      operations: []
+      artifacts: []
+  - grafana:
+      type: "docker_container"
+      description: null
+      properties:
+        - memory: "100"
+        - name: "grafana"
+        - network_mode: "bridge"
+        - image: "grafana/grafana:11.2.0"
+        - restart: "unless-stopped"
+        - env: "[GF_INSTALL_PLUGINS=grafana-opensearch-datasource]"
+        - ports.internal: "3000"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - volumes.container_path: "/etc/grafana/grafana.ini"
+        - volumes.host_path: "abspath(\"../src/grafana/grafana.ini\")"
+        - volumes.container_path: "/etc/grafana/provisioning/"
+        - volumes.host_path: "abspath(\"../src/grafana/provisioning/\")"
+      operations: []
+      artifacts: []
+  - frontendproxy:
+      type: "docker_container"
+      description: null
+      properties:
+        - hostname: "frontendproxy"
+        - name: "frontend-proxy"
+        - network_mode: "bridge"
+        - env: "[FRONTEND_PORT=8080, FRONTEND_HOST=frontend, LOCUST_WEB_HOST=loadgenerator,\
+            \ LOCUST_WEB_PORT=8089, GRAFANA_SERVICE_PORT=3000, GRAFANA_SERVICE_HOST=grafana,\
+            \ JAEGER_SERVICE_PORT=16686, JAEGER_SERVICE_HOST=jaeger, OTEL_COLLECTOR_HOST=otelcol,\
+            \ IMAGE_PROVIDER_HOST=imageprovider, IMAGE_PROVIDER_PORT=8081, OTEL_COLLECTOR_PORT_GRPC=4317,\
+            \ OTEL_COLLECTOR_PORT_HTTP=4318, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
+            \ service.version=1.11.1, ENVOY_PORT=8080, FLAGD_HOST=flagd, FLAGD_PORT=8013]"
+        - depends_on: "[frontend, loadgenerator, jaeger, grafana]"
+        - restart: "unless-stopped"
+        - image: "ghcr.io/open-telemetry/demo:latest-frontendproxy"
+        - memory: "50"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "8080"
+        - ports.external: "8080"
+        - ports.internal: "1000"
+        - ports.external: "1000"
+      operations: []
+      artifacts: []
+  - adservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - name: "ad-service"
+        - depends_on: "[otelcol, flagd]"
+        - image: "ghcr.io/open-telemetry/demo:latest-adservice"
+        - memory: "300"
+        - network_mode: "bridge"
+        - env: "[AD_SERVICE_PORT=9555, FLAGD_HOST=flagd, FLAGD_PORT=8013, OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318,\
+            \ OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=Cumulative, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
+            \ service.version=1.11.1, OTEL_LOGS_EXPORTER=otlp, OTEL_SERVICE_NAME=adservice]"
+        - hostname: "adservice"
+        - restart: "unless-stopped"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "9555"
+      operations: []
+      artifacts: []
+  - paymentservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - name: "payment-service"
+        - image: "ghcr.io/open-telemetry/demo:latest-paymentservice"
+        - depends_on: "[otelcol, flagd]"
+        - env: "[PAYMENT_SERVICE_PORT=50051, FLAGD_HOST=flagd, FLAGD_PORT=8013, OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317,\
+            \ OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
+            \ service.version=1.11.1, OTEL_SERVICE_NAME=paymentservice]"
+        - network_mode: "bridge"
+        - memory: "120"
+        - hostname: "paymentservice"
+        - restart: "unless-stopped"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "50051"
+      operations: []
+      artifacts: []
+  - imageprovider:
+      type: "docker_container"
+      description: null
+      properties:
+        - env: "[IMAGE_PROVIDER_PORT=8081, OTEL_COLLECTOR_HOST=otelcol, OTEL_COLLECTOR_PORT_GRPC=4317,\
+            \ OTEL_SERVICE_NAME=imageprovider, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
+            \ service.version=1.11.1]"
+        - name: "image-provider"
+        - image: "ghcr.io/open-telemetry/demo:latest-imageprovider"
+        - network_mode: "bridge"
+        - memory: "120"
+        - depends_on: "[otelcol]"
+        - restart: "unless-stopped"
+        - hostname: "imageprovider"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "8081"
+      operations: []
+      artifacts: []
+  - prometheus:
+      type: "docker_container"
+      description: null
+      properties:
+        - image: "quay.io/prometheus/prometheus:v2.54.1"
+        - command: "--web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries\
+            \  --storage.tsdb.retention.time=1h --config.file=/etc/prometheus/prometheus-config.yaml\
+            \  --storage.tsdb.path=/prometheus  --web.enable-lifecycle  --web.route-prefix=/\
+            \  --enable-feature=exemplar-storage  --enable-feature=otlp-write-receiver"
+        - memory: "300"
+        - network_mode: "bridge"
+        - restart: "unless-stopped"
+        - name: "prometheus"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "9090"
+        - ports.external: "9090"
+        - volumes.host_path: "abspath(\"../src/prometheus/prometheus-config.yaml\"\
+            )"
+        - volumes.container_path: "/etc/prometheus/prometheus-config.yaml"
+      operations: []
+      artifacts: []
+  - kafka:
+      type: "docker_container"
+      description: null
+      properties:
+        - memory: "600"
+        - env: "[KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092, OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318,\
+            \ OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
+            \ service.version=1.11.1, OTEL_SERVICE_NAME=kafka, KAFKA_HEAP_OPTS=-Xmx400m\
+            \ -Xms400m]"
+        - name: "kafka"
+        - image: "ghcr.io/open-telemetry/demo:latest-kafka"
+        - network_mode: "bridge"
+        - restart: "unless-stopped"
+        - healthcheck.test: "nc -z kafka 9092"
+        - healthcheck.timeout: "10s"
+        - healthcheck.interval: "5s"
+        - healthcheck.start_period: "10s"
+        - healthcheck.retries: "10"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "9092"
+      operations: []
+      artifacts: []
+  - loadgenerator:
+      type: "docker_container"
+      description: null
+      properties:
+        - env: "[LOCUST_WEB_PORT=8089, LOCUST_USERS=10, LOCUST_HOST=http://frontend-proxy:8080,\
+            \ LOCUST_HEADLESS=false, LOCUST_AUTOSTART=true, LOCUST_BROWSER_TRAFFIC_ENABLED=true,\
+            \ OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317, OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative,\
+            \ OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo, service.version=1.11.1,\
+            \ OTEL_SERVICE_NAME=loadgenerator, PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python,\
+            \ LOCUST_WEB_HOST=0.0.0.0, FLAGD_HOST=flagd, FLAGD_PORT=8013]"
+        - image: "ghcr.io/open-telemetry/demo:latest-loadgenerator"
+        - memory: "1000"
+        - name: "load-generator"
+        - depends_on: "[frontend, flagd]"
+        - hostname: "loadgenerator"
+        - network_mode: "bridge"
+        - restart: "unless-stopped"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "8089"
+      operations: []
+      artifacts: []
+  - flagd:
+      type: "docker_container"
+      description: null
+      properties:
+        - image: "ghcr.io/open-feature/flagd:v0.11.2"
+        - command: "start --uri file:./etc/flagd/demo.flagd.json"
+        - network_mode: "bridge"
+        - env: "[FLAGD_OTEL_COLLECTOR_URI=otelcol:4317, FLAGD_METRICS_EXPORTER=otel,\
+            \ OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo, service.version=1.11.1,\
+            \ OTEL_SERVICE_NAME=flagd]"
+        - name: "flagd"
+        - memory: "50"
+        - volumes.host_path: "abspath(\"../src/flagd\")"
+        - volumes.container_path: "/etc/flagd"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "8013"
+      operations: []
+      artifacts: []
+  - productcatalogservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - env: "[PRODUCT_CATALOG_SERVICE_PORT=3550, FLAGD_HOST=flagd, FLAGD_PORT=8013,\
+            \ OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317, OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative,\
+            \ OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo, service.version=1.11.1,\
+            \ OTEL_SERVICE_NAME=productcatalogservice, MONGO_USERNAME=mongo, MONGO_PASSWORD=mongo_product_catalog,\
+            \ MONGO_HOSTNAME=mongo, MONGO_PORT=27017]"
+        - hostname: "productcatalogservice"
+        - image: "ghcr.io/open-telemetry/demo:latest-productcatalogservice"
+        - depends_on: "[otelcol, flagd, mongodb-catalog]"
+        - name: "product-catalog-service"
+        - network_mode: "bridge"
+        - memory: "20"
+        - restart: "unless-stopped"
+        - ports.internal: "3550"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+      operations: []
+      artifacts: []
+  - valkey-cart:
+      type: "docker_container"
+      description: null
+      properties:
+        - user: "valkey"
+        - memory: "20"
+        - network_mode: "bridge"
+        - name: "valkey-cart"
+        - restart: "unless-stopped"
+        - image: "valkey/valkey:8.0-alpine"
+        - ports.internal: "6379"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+      operations: []
+      artifacts: []
+  - opensearch:
+      type: "docker_container"
+      description: null
+      properties:
+        - env: "[cluster.name=demo-cluster, node.name=demo-node, bootstrap.memory_lock=true,\
+            \ discovery.type=single-node, OPENSEARCH_JAVA_OPTS=-Xms300m -Xmx300m,\
+            \ DISABLE_INSTALL_DEMO_CONFIG=true, DISABLE_SECURITY_PLUGIN=true]"
+        - image: "opensearchproject/opensearch:2.16.0"
+        - memory: "1000"
+        - name: "opensearch"
+        - network_mode: "bridge"
+        - restart: "unless-stopped"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "9200"
+      operations: []
+      artifacts: []
+  - open-telemetry-network:
+      type: "docker_network"
+      description: null
+      properties:
+        - driver: "bridge"
+        - name: "opentelemetry-demo"
+      operations: []
+      artifacts: []
+  - frauddetectionservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - depends_on: "[otelcol, kafka]"
+        - memory: "300"
+        - name: "frauddetection-service"
+        - network_mode: "bridge"
+        - env: "[FLAGD_HOST=flagd, FLAGD_PORT=8013, KAFKA_SERVICE_ADDR=kafka:9092,\
+            \ OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318, OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=Cumulative,\
+            \ OTEL_INSTRUMENTATION_KAFKA_EXPERIMENTAL_SPAN_ATTRIBUTES=true, OTEL_INSTRUMENTATION_MESSAGING_EXPERIMENTAL_RECEIVE_TELEMETRY_ENABLED=true,\
+            \ OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo, service.version=1.11.1,\
+            \ OTEL_SERVICE_NAME=frauddetectionservice]"
+        - hostname: "frauddetectionservice"
+        - image: "ghcr.io/open-telemetry/demo:latest-frauddetectionservice"
+        - restart: "unless-stopped"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+      operations: []
+      artifacts: []
+  - quoteservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - image: "ghcr.io/open-telemetry/demo:latest-quoteservice"
+        - env: "[OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318, OTEL_PHP_AUTOLOAD_ENABLED=true,\
+            \ QUOTE_SERVICE_PORT=8090, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
+            \ service.version=1.11.1, OTEL_SERVICE_NAME=quoteservice, OTEL_PHP_INTERNAL_METRICS_ENABLED=true]"
+        - name: "quote-service"
+        - memory: "40"
+        - network_mode: "bridge"
+        - depends_on: "[otelcol]"
+        - hostname: "quoteservice"
+        - restart: "unless-stopped"
+        - ports.internal: "8090"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+      operations: []
+      artifacts: []
+  - cartservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - depends_on: "[valkey-cart, otelcol, flagd]"
+        - image: "ghcr.io/open-telemetry/demo:latest-cartservice"
+        - name: "cart-service"
+        - network_mode: "bridge"
+        - hostname: "cartservice"
+        - memory: "160"
+        - restart: "unless-stopped"
+        - env: "[CART_SERVICE_PORT=7070, FLAGD_HOST=flagd, FLAGD_PORT=8013, VALKEY_ADDR=valkey-cart:6379,\
+            \ OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
+            \ service.version=1.11.1, OTEL_SERVICE_NAME=cartservice, ASPNETCORE_URLS=http://*:7070]"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "7070"
+      operations: []
+      artifacts: []
+  - jaeger:
+      type: "docker_container"
+      description: null
+      properties:
+        - memory: "400"
+        - image: "jaegertracing/all-in-one:1.60"
+        - command: "--memory.max-traces=5000 --query.base-path=/jaeger/ui --prometheus.server-url=http://prometheus:9090\
+            \ --prometheus.query.normalize-calls=true --prometheus.query.normalize-duration=true"
+        - network_mode: "bridge"
+        - env: "[METRICS_STORAGE_TYPE=prometheus]"
+        - name: "jaeger"
+        - restart: "unless-stopped"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "16686"
+        - ports.internal: "4317"
+      operations: []
+      artifacts: []
+  - shippingservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - name: "shipping-service"
+        - env: "[SHIPPING_SERVICE_PORT=50050, QUOTE_SERVICE_ADDR=http://quoteservice:8090,\
+            \ OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
+            \ service.version=1.11.1, OTEL_SERVICE_NAME=shippingservice]"
+        - network_mode: "bridge"
+        - memory: "20"
+        - hostname: "shippingservice"
+        - depends_on: "[otelcol]"
+        - restart: "unless-stopped"
+        - image: "ghcr.io/open-telemetry/demo:latest-shippingservice"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "50050"
+      operations: []
+      artifacts: []
+  - otelcol:
+      type: "docker_container"
+      description: null
+      properties:
+        - image: "otel/opentelemetry-collector-contrib:0.108.0"
+        - env: "[ENVOY_PORT=8080, OTEL_COLLECTOR_HOST=otelcol, OTEL_COLLECTOR_PORT_GRPC=4317,\
+            \ OTEL_COLLECTOR_PORT_HTTP=4318]"
+        - command: "--config=/etc/otelcol-config.yml --config=/etc/otelcol-config-extras.yml"
+        - memory: "200"
+        - user: "0:0"
+        - network_mode: "bridge"
+        - depends_on: "[jaeger]"
+        - name: "otel-col"
+        - hostname: "otelcol"
+        - restart: "unless-stopped"
+        - volumes.host_path: "abspath(\"../src/otelcollector/otelcol-config.yml\")"
+        - volumes.container_path: "/etc/otelcol-config.yml"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - volumes.container_path: "/etc/otelcol-config-extras.yml"
+        - volumes.host_path: "abspath(\"../src/otelcollector/otelcol-config-extras.yml\"\
+            )"
+        - ports.internal: "4317"
+        - ports.internal: "4318"
+        - volumes.container_path: "/var/run/docker.sock"
+        - volumes.host_path: "/var/run/docker.sock"
+      operations: []
+      artifacts: []
+  - accountingservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - depends_on: "[otelcol, kafka]"
+        - hostname: "accountingservice"
+        - image: "ghcr.io/open-telemetry/demo:latest-accountingservice"
+        - name: "accounting-service"
+        - network_mode: "bridge"
+        - memory: "120"
+        - restart: "unless-stopped"
+        - env: "[KAFKA_SERVICE_ADDR=kafka:9092, OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318,\
+            \ OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=Cumulative, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
+            \ service.version=1.11.1, OTEL_SERVICE_NAME=accountingservice]"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+      operations: []
+      artifacts: []
+  - checkoutservice:
+      type: "docker_container"
+      description: null
+      properties:
+        - name: "checkout-service"
+        - hostname: "checkoutservice"
+        - image: "ghcr.io/open-telemetry/demo:latest-checkoutservice"
+        - env: "[FLAGD_HOST=flagd, FLAGD_PORT=8013, CHECKOUT_SERVICE_PORT=5050, CART_SERVICE_ADDR=cartservice:7070,\
+            \ CURRENCY_SERVICE_ADDR=currencyservice:7001, EMAIL_SERVICE_ADDR=http://emailservice:6060,\
+            \ PAYMENT_SERVICE_ADDR=paymentservice:50051, PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550,\
+            \ SHIPPING_SERVICE_ADDR=shippingservice:50050, KAFKA_SERVICE_ADDR=kafka:9092,\
+            \ OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317, OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=Cumulative,\
+            \ OTEL_RESOURCE_ATTRIBUTES=opentelemetry-demo, service.version=1.11.1,\
+            \ OTEL_SERVICE_NAME=checkoutservice, ]"
+        - depends_on: "[cartservice, currencyservice, emailservice, paymentservice,\
+            \ productcatalogservice, shippingservice, otelcol, flagd]"
+        - network_mode: "bridge"
+        - memory: "20"
+        - restart: "unless-stopped"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "5050"
+      operations: []
+      artifacts: []
+  - mongodb-catalog:
+      type: "docker_container"
+      description: null
+      properties:
+        - name: "mongodb-catalog"
+        - hostname: "mongo"
+        - image: "mongo:8.0.0-rc9"
+        - memory: "256"
+        - env: "[MONGO_INITDB_ROOT_USERNAME=mongo, MONGO_INITDB_ROOT_PASSWORD=mongo_product_catalog]"
+        - network_mode: "bridge"
+        - restart: "unless-stopped"
+        - healthcheck.test: "echo db.runCommand(ping).ok | mongosh localhost:27017/test\
+            \ --quiet"
+        - healthcheck.timeout: "10s"
+        - healthcheck.interval: "5s"
+        - healthcheck.start_period: "10s"
+        - healthcheck.retries: "10"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+        - ports.internal: "27017"
+        - ports.external: "27017"
+      operations: []
+      artifacts: []
+  - frontend:
+      type: "docker_container"
+      description: null
+      properties:
+        - name: "frontend"
+        - depends_on: "[adservice, cartservice, checkoutservice, currencyservice,\
+            \ productcatalogservice, quoteservice, recommendationservice, shippingservice,\
+            \ otelcol, imageprovider, flagd]"
+        - image: "ghcr.io/open-telemetry/demo:latest-frontend"
+        - memory: "250"
+        - network_mode: "bridge"
+        - env: "[PORT=8080, FRONTEND_ADDR=frontend:8080, AD_SERVICE_ADDR=adservice:9555,\
+            \ CART_SERVICE_ADDR=cartservice:7070, CHECKOUT_SERVICE_ADDR=checkoutservice:5050,\
+            \ CURRENCY_SERVICE_ADDR=currencyservice:7001, PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550,\
+            \ RECOMMENDATION_SERVICE_ADDR=recommendationservice:9001, SHIPPING_SERVICE_ADDR=shippingservice:50050,\
+            \ OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317, OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,\
+            \ service.version=1.11.1, ENV_PLATFORM=local, OTEL_SERVICE_NAME=frontend,\
+            \ PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://localhost:8080/otlp-http/v1/traces,\
+            \ OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative, WEB_OTEL_SERVICE_NAME=frontend-web,\
+            \ OTEL_COLLECTOR_HOST=otelcol, FLAGD_HOST=flagd, FLAGD_PORT=8013]"
+        - restart: "unless-stopped"
+        - ports.internal: "8080"
+        - networks_advanced.name: "docker_network.open-telemetry-network.name"
+      operations: []
+      artifacts: []
+  - default-container-runtime:
+      type: "container_runtime"
+      description: null
+      properties:
+        - name: "Docker Desktop"
+        - version: "4.34.2"
+      operations: []
+      artifacts: []
+relations:
+  - recommendationservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "recommendationservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - currencyservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "currencyservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - emailservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "emailservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - grafana_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "grafana"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - frontendproxy_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "frontendproxy"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - adservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "adservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - paymentservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "paymentservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - imageprovider_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "imageprovider"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - prometheus_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "prometheus"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - kafka_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "kafka"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - loadgenerator_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "loadgenerator"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - flagd_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "flagd"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - productcatalogservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "productcatalogservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - valkey-cart_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "valkey-cart"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - opensearch_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "opensearch"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - frauddetectionservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "frauddetectionservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - quoteservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "quoteservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - cartservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "cartservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - jaeger_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "jaeger"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - shippingservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "shippingservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - otelcol_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "otelcol"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - accountingservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "accountingservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - checkoutservice_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "checkoutservice"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - mongodb-catalog_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "mongodb-catalog"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - frontend_hostedOn_default-container-runtime:
+      type: "HostedOn"
+      description: null
+      source: "frontend"
+      target: "default-container-runtime"
+      properties: []
+      operations: []
+  - recommendationservice_connectsTo_productcatalogservice:
+      type: "ConnectsTo"
+      description: null
+      source: "recommendationservice"
+      target: "productcatalogservice"
+      properties: []
+      operations: []
+  - recommendationservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "recommendationservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - recommendationservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "recommendationservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - currencyservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "currencyservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - emailservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "emailservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - frontendproxy_connectsTo_frontend:
+      type: "ConnectsTo"
+      description: null
+      source: "frontendproxy"
+      target: "frontend"
+      properties: []
+      operations: []
+  - frontendproxy_connectsTo_loadgenerator:
+      type: "ConnectsTo"
+      description: null
+      source: "frontendproxy"
+      target: "loadgenerator"
+      properties: []
+      operations: []
+  - frontendproxy_connectsTo_jaeger:
+      type: "ConnectsTo"
+      description: null
+      source: "frontendproxy"
+      target: "jaeger"
+      properties: []
+      operations: []
+  - frontendproxy_connectsTo_grafana:
+      type: "ConnectsTo"
+      description: null
+      source: "frontendproxy"
+      target: "grafana"
+      properties: []
+      operations: []
+  - adservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "adservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - adservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "adservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - paymentservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "paymentservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - paymentservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "paymentservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - imageprovider_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "imageprovider"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - loadgenerator_connectsTo_frontend:
+      type: "ConnectsTo"
+      description: null
+      source: "loadgenerator"
+      target: "frontend"
+      properties: []
+      operations: []
+  - loadgenerator_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "loadgenerator"
+      target: "flagd"
+      properties: []
+      operations: []
+  - productcatalogservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "productcatalogservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - productcatalogservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "productcatalogservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - productcatalogservice_connectsTo_mongodb-catalog:
+      type: "ConnectsTo"
+      description: null
+      source: "productcatalogservice"
+      target: "mongodb-catalog"
+      properties: []
+      operations: []
+  - frauddetectionservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "frauddetectionservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - frauddetectionservice_connectsTo_kafka:
+      type: "ConnectsTo"
+      description: null
+      source: "frauddetectionservice"
+      target: "kafka"
+      properties: []
+      operations: []
+  - quoteservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "quoteservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - cartservice_connectsTo_valkey-cart:
+      type: "ConnectsTo"
+      description: null
+      source: "cartservice"
+      target: "valkey-cart"
+      properties: []
+      operations: []
+  - cartservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "cartservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - cartservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "cartservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - shippingservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "shippingservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - otelcol_connectsTo_jaeger:
+      type: "ConnectsTo"
+      description: null
+      source: "otelcol"
+      target: "jaeger"
+      properties: []
+      operations: []
+  - accountingservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "accountingservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - accountingservice_connectsTo_kafka:
+      type: "ConnectsTo"
+      description: null
+      source: "accountingservice"
+      target: "kafka"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_cartservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "cartservice"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_currencyservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "currencyservice"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_emailservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "emailservice"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_paymentservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "paymentservice"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_productcatalogservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "productcatalogservice"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_shippingservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "shippingservice"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - frontend_connectsTo_adservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "adservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_cartservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "cartservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_checkoutservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "checkoutservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_currencyservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "currencyservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_productcatalogservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "productcatalogservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_quoteservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "quoteservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_recommendationservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "recommendationservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_shippingservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "shippingservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - frontend_connectsTo_imageprovider:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "imageprovider"
+      properties: []
+      operations: []
+  - frontend_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "flagd"
+      properties: []
+      operations: []
+component_types:
+  - BaseType:
+      extends: "-"
+      description: "This is the base type"
+      properties: []
+      operations: []
+  - docker_container:
+      extends: "-"
+      description: null
+      properties:
+        - image:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - volumes.host_path:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - memory:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - depends_on:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - restart:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - network_mode:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - ports.internal:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - healthcheck.test:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - env:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - command:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - healthcheck.interval:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - networks_advanced.name:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - ports.external:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - hostname:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - healthcheck.timeout:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - volumes.container_path:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - healthcheck.retries:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - name:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - healthcheck.start_period:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - user:
+            type: "STRING"
+            required: false
+            default_value: ""
+      operations: []
+  - docker_network:
+      extends: "-"
+      description: null
+      properties:
+        - driver:
+            type: "STRING"
+            required: false
+            default_value: "bridge"
+        - name:
+            type: "STRING"
+            required: false
+            default_value: "opentelemetry-demo"
+      operations: []
+  - container_runtime:
+      extends: "-"
+      description: null
+      properties:
+        - name:
+            type: "STRING"
+            required: false
+            default_value: ""
+        - version:
+            type: "STRING"
+            required: false
+            default_value: ""
+      operations: []
+relation_types:
+  - DependsOn:
+      extends: "-"
+      description: "generic relation type"
+      properties: []
+      operations: []
+  - HostedOn:
+      extends: "DependsOn"
+      description: "hosted on relation"
+      properties: []
+      operations: []
+  - ConnectsTo:
+      extends: "DependsOn"
+      description: "connects to relation"
+      properties: []
+      operations: []
