@@ -35,6 +35,6 @@ jobs:
           file: ./src/productcatalogservice/Dockerfile
           platforms: linux/amd64, linux/arm64
           push: true
-          tags: ghcr.io/UST-DeMAF/productcatalogservice:latest
+          tags: ghcr.io/ust-demaf/productcatalogservice:latest
           provenance: false
 
