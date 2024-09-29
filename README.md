@@ -49,16 +49,16 @@ For all three evaluated technologies (Ansible, Terraform, Kubernetes) there is a
 The target EDMM models can be found in the [/edmm directory](./edmm)
 
 In each model the goal is to retrieve a component for each deployed Astronomy Shop component 
-and as many _connects-to_ and _hosted-on_ relations as possible.
+and as many _connects-to_ and _hosted_on_ relations as possible.
 
 This in common, there are also differences in the target models.
 
 Due to the imperative character of Ansible, in the [Ansible target model](./edmm/otel-store_ansible_translated.yaml), each component has operations representing the installation of the Docker containers.
 
-In the [Terraform target model](./edmm/otel-store_terraform_translated.yaml), there are common component types for all docker_containers, 
+In the [Terraform target model](./edmm/otel-store_terraform_translated.yaml), there are common component types for all _docker_containers_, 
 as they all use the same terraform ressource type. This is different in the other two evaluated technologies, where each component has a dedicated type.
 
 For the Kubernetes model there are two variants. The [first](./edmm/otel-store_k8s_translated.yaml) is the actual result of the translation, lacking _hosted_on_ relations.
-That is, as the Kubernetes plugin only creates hosted_on relations when a component named "container_runtime" with a matching type is present in the TADM.
-Therefore, there is a [second target model](./edmm/otel-store_k8s_translated_with_container_runtime.yaml) where this "container_runtime" has been manually added, before creating the relations.
+That is, as the Kubernetes plugin only creates _hosted_on_ relations when a component named _container_runtime_ with a matching type is present in the TADM.
+Therefore, there is a [second target model](./edmm/otel-store_k8s_translated_with_container_runtime.yaml) where this _container_runtime_ has been manually added, before creating the relations.
 Thus, all components obtain a _hosted_on_ relation.
