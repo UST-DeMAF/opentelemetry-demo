@@ -8,14 +8,14 @@ components:
         - ansible_connection: "local"
       operations:
         - Ensure default network is created:
-            artifatcs: []
+            artifacts: []
         - Ensure services are enabled to start at boot:
-            artifatcs:
+            artifacts:
               - launchd:
                   name: "item"
                   fileURI: "file:/to/be/generated"
         - Ensure services are started:
-            artifatcs:
+            artifacts:
               - launchd:
                   name: "item"
                   fileURI: "file:/to/be/generated"
@@ -31,7 +31,7 @@ components:
         - SHIPPING_SERVICE_PORT: "50050"
       operations:
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-shippingservice:1.11.1-shippingservice"
                   fileURI: "-"
@@ -39,7 +39,7 @@ components:
                   name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-shippingservice:1.11.1-shippingservice"
                   fileURI: "-"
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-shippingservice"
                   fileURI: "-"
@@ -65,7 +65,7 @@ components:
         - OTEL_PHP_AUTOLOAD_ENABLED: "true"
       operations:
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-quoteservice:1.11.1-quoteservice"
                   fileURI: "-"
@@ -73,7 +73,7 @@ components:
                   name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-quoteservice:1.11.1-quoteservice"
                   fileURI: "-"
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-quoteservice"
                   fileURI: "-"
@@ -92,7 +92,7 @@ components:
         - OTEL_SERVICE_NAME: "currencyservice"
       operations:
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-currencyservice"
                   fileURI: "-"
@@ -100,7 +100,7 @@ components:
                   name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-currencyservice"
                   fileURI: "-"
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-currencyservice:1.11.1-currencyservice"
                   fileURI: "-"
@@ -124,7 +124,7 @@ components:
         - METRICS_STORAGE_TYPE: "prometheus"
       operations:
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "jaegertracing/all-in-one:1.60"
                   fileURI: "-"
@@ -132,7 +132,7 @@ components:
                   name: "/bin/sh docker pull jaegertracing/all-in-one:1.60"
                   fileURI: "-"
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "jaegertracing/all-in-one:1.60"
                   fileURI: "-"
@@ -154,7 +154,7 @@ components:
         - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
       operations:
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-adservice"
                   fileURI: "-"
@@ -162,7 +162,7 @@ components:
                   name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-adservice"
                   fileURI: "-"
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-adservice:1.11.1-adservice"
                   fileURI: "-"
@@ -189,7 +189,7 @@ components:
         - OTEL_COLLECTOR_PORT_GRPC: "4317"
       operations:
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "otel/opentelemetry-collector-contrib:0.108.0"
                   fileURI: "-"
@@ -197,7 +197,7 @@ components:
                   name: "/bin/sh docker run otel/opentelemetry-collector-contrib:0.108.0"
                   fileURI: "-"
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "otel/opentelemetry-collector-contrib:0.108.0"
                   fileURI: "-"
@@ -229,7 +229,7 @@ components:
         - IMAGE_PROVIDER_PORT: "8081"
       operations:
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-imageprovider"
                   fileURI: "-"
@@ -237,7 +237,7 @@ components:
                   name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-imageprovider"
                   fileURI: "-"
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-imageprovider:1.11.1-imageprovider"
                   fileURI: "-"
@@ -260,7 +260,7 @@ components:
         - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
       operations:
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-frauddetectionservice:1.11.1-frauddetectionservice"
                   fileURI: "-"
@@ -268,7 +268,7 @@ components:
                   name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-frauddetectionservice:1.11.1-frauddetectionservice"
                   fileURI: "-"
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-frauddetectionservice"
                   fileURI: "-"
@@ -292,7 +292,7 @@ components:
         - RECOMMENDATION_SERVICE_PORT: "9001"
       operations:
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-recommendationservice:1.11.1-recommendationservice"
                   fileURI: "-"
@@ -300,7 +300,7 @@ components:
                   name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-recommendationservice:1.11.1-recommendationservice"
                   fileURI: "-"
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-recommendationservice"
                   fileURI: "-"
@@ -321,7 +321,7 @@ components:
         - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
       operations:
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-paymentservice:1.11.1-paymentservice"
                   fileURI: "-"
@@ -329,7 +329,7 @@ components:
                   name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-paymentservice:1.11.1-paymentservice"
                   fileURI: "-"
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-paymentservice"
                   fileURI: "-"
@@ -348,7 +348,7 @@ components:
         - OTEL_RESOURCE_ATTRIBUTES: "service.name=emailservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
       operations:
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-emailservice"
                   fileURI: "-"
@@ -356,7 +356,7 @@ components:
                   name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-emailservice"
                   fileURI: "-"
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-emailservice"
                   fileURI: "-"
@@ -379,7 +379,7 @@ components:
         - VALKEY_ADDR: "valkeycart:6379"
       operations:
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-cartservice:1.11.1-cartservice"
                   fileURI: "-"
@@ -387,7 +387,7 @@ components:
                   name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-cartservice:1.11.1-cartservice"
                   fileURI: "-"
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-cartservice"
                   fileURI: "-"
@@ -407,7 +407,7 @@ components:
         - OTEL_RESOURCE_ATTRIBUTES: "service.name=kafka,service.namespace=opentelemetry-demo,service.version=1.11.1"
       operations:
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-kafka"
                   fileURI: "-"
@@ -415,7 +415,7 @@ components:
                   name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-kafka"
                   fileURI: "-"
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-kafka:1.11.1-kafka"
                   fileURI: "-"
@@ -450,7 +450,7 @@ components:
         - SHIPPING_SERVICE_ADDR: "shippingservice:50050"
       operations:
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-frontend:1.11.1-frontend"
                   fileURI: "-"
@@ -458,7 +458,7 @@ components:
                   name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-frontend:1.11.1-frontend"
                   fileURI: "-"
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-frontend"
                   fileURI: "-"
@@ -477,7 +477,7 @@ components:
         - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
       operations:
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-accountingservice"
                   fileURI: "-"
@@ -485,7 +485,7 @@ components:
                   name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-accountingservice"
                   fileURI: "-"
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-accountingservice:1.11.1-accountingservice"
                   fileURI: "-"
@@ -516,7 +516,7 @@ components:
         - OTEL_SERVICE_NAME: "productcatalogservice"
       operations:
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice:1.11.1-productcatalogservice"
                   fileURI: "-"
@@ -524,7 +524,7 @@ components:
                   name: "/bin/sh docker pull ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice:1.11.1-productcatalogservice"
                   fileURI: "-"
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice"
                   fileURI: "-"
@@ -559,7 +559,7 @@ components:
         - SHIPPING_SERVICE_ADDR: "shippingservice:50050"
       operations:
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-checkoutservice:1.11.1-checkoutservice"
                   fileURI: "-"
@@ -567,7 +567,7 @@ components:
                   name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-checkoutservice:1.11.1-checkoutservice"
                   fileURI: "-"
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-checkoutservice"
                   fileURI: "-"
@@ -582,7 +582,7 @@ components:
         - GF_INSTALL_PLUGINS: "grafana-opensearch-datasource"
       operations:
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "grafana/grafana:11.2.0"
                   fileURI: "-"
@@ -590,7 +590,7 @@ components:
                   name: "/bin/sh docker pull grafana/grafana:11.2.0"
                   fileURI: "-"
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "grafana/grafana:11.2.0"
                   fileURI: "-"
@@ -624,7 +624,7 @@ components:
         - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
       operations:
         - Deploy Service:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-loadgenerator"
                   fileURI: "-"
@@ -632,7 +632,7 @@ components:
                   name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-loadgenerator"
                   fileURI: "-"
         - Pull the latest Docker image:
-            artifatcs:
+            artifacts:
               - docker_image:
                   name: "ghcr.io/open-telemetry/demo:1.11.1-loadgenerator:1.11.1-loadgenerator"
                   fileURI: "-"
