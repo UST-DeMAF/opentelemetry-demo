@@ -1,5 +1,5 @@
 service_name: "grafana"
-image_name: "grafana/grafana:10.4.3"
+image_name: "grafana/grafana:11.2.0"
 memory_limit: "100M"
 ports: "3000"
 volumes:

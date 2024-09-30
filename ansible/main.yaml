@@ -3,7 +3,7 @@
   hosts: all
   become: true
   vars:
-    demo_version: "1.10.0"
+    demo_version: "1.11.1"
     network_name: "opentelemetry-demo"
     state: "started"
     restart_policy: "unless-stopped"
@@ -17,11 +17,12 @@
     otel_collector_port_http: "4318"
     envoy_port: "8080"
   pre_tasks:
-    - name: Ensure Docker is installed
-      apt:
-        name: docker.io
-        state: present
-      become: true
+    # This is not working on every docker environment, and for the installation it is not essential
+    #- name: Ensure Docker is installed
+    #  apt:
+    #    name: docker.io
+    #    state: present
+    #  become: true
 
     - name: Ensure default network is created
       docker_network:

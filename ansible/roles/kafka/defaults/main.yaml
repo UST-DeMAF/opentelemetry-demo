@@ -1,5 +1,5 @@
 service_name: "kafka"
-image_name: "ghcr.io/open-telemetry/demo:1.10.0-kafka"
+image_name: "ghcr.io/open-telemetry/demo:1.11.1-kafka"
 ports: "9092"
 memory_limit: "600M"
 kafkaservice_addr: "kafka:9092"
