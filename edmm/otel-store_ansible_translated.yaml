@@ -1,0 +1,1932 @@
+---
+properties: []
+components:
+  - localhost:
+      type: "localhost-type"
+      description: null
+      properties:
+        - ansible_connection: "local"
+      operations:
+        - Ensure default network is created:
+            artifacts: []
+        - Ensure services are enabled to start at boot:
+            artifacts:
+              - launchd:
+                  name: "item"
+                  fileURI: "file:/to/be/generated"
+        - Ensure services are started:
+            artifacts:
+              - launchd:
+                  name: "item"
+                  fileURI: "file:/to/be/generated"
+      artifacts: []
+  - shippingservice:
+      type: "shippingservice-type"
+      description: null
+      properties:
+        - QUOTE_SERVICE_ADDR: "http://quoteservice:8090"
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4317"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=shippingservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - OTEL_SERVICE_NAME: "shippingservice"
+        - SHIPPING_SERVICE_PORT: "50050"
+      operations:
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-shippingservice:1.11.1-shippingservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-shippingservice:1.11.1-shippingservice"
+                  fileURI: "-"
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-shippingservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-shippingservice"
+                  fileURI: "-"
+      artifacts: []
+  - valkeycart:
+      type: "valkeycart-type"
+      description: null
+      properties: []
+      operations: []
+      artifacts: []
+  - quoteservice:
+      type: "quoteservice-type"
+      description: null
+      properties:
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=quoteservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - QUOTE_SERVICE_PORT: "8090"
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4318"
+        - OTEL_PHP_INTERNAL_METRICS_ENABLED: "true"
+        - OTEL_SERVICE_NAME: "quoteservice"
+        - OTEL_PHP_AUTOLOAD_ENABLED: "true"
+      operations:
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-quoteservice:1.11.1-quoteservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-quoteservice:1.11.1-quoteservice"
+                  fileURI: "-"
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-quoteservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-quoteservice"
+                  fileURI: "-"
+      artifacts: []
+  - currencyservice:
+      type: "currencyservice-type"
+      description: null
+      properties:
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4317"
+        - CURRENCY_SERVICE_PORT: "7001"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=currencyservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - VERSION: "1.11.1"
+        - OTEL_SERVICE_NAME: "currencyservice"
+      operations:
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-currencyservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-currencyservice"
+                  fileURI: "-"
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-currencyservice:1.11.1-currencyservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-currencyservice:1.11.1-currencyservice"
+                  fileURI: "-"
+      artifacts: []
+  - flagd:
+      type: "flagd-type"
+      description: null
+      properties: []
+      operations: []
+      artifacts:
+        - file:
+            name: "-"
+            fileURI: "file:/<absolute-path>/ansible/roles/flagd/files/demo.flagd.json"
+  - jaeger:
+      type: "jaeger-type"
+      description: null
+      properties:
+        - METRICS_STORAGE_TYPE: "prometheus"
+      operations:
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "jaegertracing/all-in-one:1.60"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull jaegertracing/all-in-one:1.60"
+                  fileURI: "-"
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "jaegertracing/all-in-one:1.60"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run jaegertracing/all-in-one:1.60"
+                  fileURI: "-"
+      artifacts: []
+  - adservice:
+      type: "adservice-type"
+      description: null
+      properties:
+        - OTEL_SERVICE_NAME: "adservice"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=adservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4318"
+        - FLAGD_HOST: "flagd"
+        - FLAGD_PORT: "8013"
+        - AD_SERVICE_PORT: "9555"
+        - OTEL_LOGS_EXPORTER: "otlp"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
+      operations:
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-adservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-adservice"
+                  fileURI: "-"
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-adservice:1.11.1-adservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-adservice:1.11.1-adservice"
+                  fileURI: "-"
+      artifacts: []
+  - prometheus:
+      type: "prometheus-type"
+      description: null
+      properties: []
+      operations: []
+      artifacts:
+        - file:
+            name: "-"
+            fileURI: "file:/<absolute-path>/ansible/roles/prometheus/files/prometheus-config.yaml"
+  - otelcol:
+      type: "otelcol-type"
+      description: null
+      properties:
+        - OTEL_COLLECTOR_HOST: "otelcol"
+        - OTEL_COLLECTOR_PORT_HTTP: "4318"
+        - ENVOY_PORT: "8080"
+        - OTEL_COLLECTOR_PORT_GRPC: "4317"
+      operations:
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "otel/opentelemetry-collector-contrib:0.108.0"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run otel/opentelemetry-collector-contrib:0.108.0"
+                  fileURI: "-"
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "otel/opentelemetry-collector-contrib:0.108.0"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull otel/opentelemetry-collector-contrib:0.108.0"
+                  fileURI: "-"
+      artifacts:
+        - file:
+            name: "-"
+            fileURI: "file:/<absolute-path>/ansible/roles/otelcol/files/otelcol-config-extras.yml"
+        - file:
+            name: "-"
+            fileURI: "file:/<absolute-path>/ansible/roles/otelcol/files/otelcol-config.yml"
+  - frontendproxy:
+      type: "frontendproxy-type"
+      description: null
+      properties: []
+      operations: []
+      artifacts: []
+  - imageprovider:
+      type: "imageprovider-type"
+      description: null
+      properties:
+        - OTEL_COLLECTOR_HOST: "otelcol"
+        - OTEL_SERVICE_NAME: "imageprovider"
+        - VERSION: "1.11.1"
+        - OTEL_COLLECTOR_PORT_GRPC: "4317"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=imageprovider,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - IMAGE_PROVIDER_PORT: "8081"
+      operations:
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-imageprovider"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-imageprovider"
+                  fileURI: "-"
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-imageprovider:1.11.1-imageprovider"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-imageprovider:1.11.1-imageprovider"
+                  fileURI: "-"
+      artifacts: []
+  - frauddetectionservice:
+      type: "frauddetectionservice-type"
+      description: null
+      properties:
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=frauddetectionservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - OTEL_SERVICE_NAME: "frauddetectionservice"
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4318"
+        - FLAGD_HOST: "flagd"
+        - KAFKA_SERVICE_ADDR: "kafka:9092"
+        - FLAGD_PORT: "8013"
+        - OTEL_INSTRUMENTATION_KAFKA_EXPERIMENTAL_SPAN_ATTRIBUTES: "true"
+        - OTEL_INSTRUMENTATION_MESSAGING_EXPERIMENTAL_RECEIVE_TELEMETRY_ENABLED: "true"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
+      operations:
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-frauddetectionservice:1.11.1-frauddetectionservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-frauddetectionservice:1.11.1-frauddetectionservice"
+                  fileURI: "-"
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-frauddetectionservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-frauddetectionservice"
+                  fileURI: "-"
+      artifacts: []
+  - recommendationservice:
+      type: "recommendationservice-type"
+      description: null
+      properties:
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4317"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=recommendationservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - FLAGD_HOST: "flagd"
+        - FLAGD_PORT: "8013"
+        - OTEL_SERVICE_NAME: "recommendationservice"
+        - OTEL_PYTHON_LOG_CORRELATION: "true"
+        - PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
+        - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: "python"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
+        - RECOMMENDATION_SERVICE_PORT: "9001"
+      operations:
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-recommendationservice:1.11.1-recommendationservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-recommendationservice:1.11.1-recommendationservice"
+                  fileURI: "-"
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-recommendationservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-recommendationservice"
+                  fileURI: "-"
+      artifacts: []
+  - paymentservice:
+      type: "paymentservice-type"
+      description: null
+      properties:
+        - PAYMENT_SERVICE_PORT: "50051"
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4317"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=paymentservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - FLAGD_HOST: "flagd"
+        - FLAGD_PORT: "8013"
+        - OTEL_SERVICE_NAME: "paymentservice"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
+      operations:
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-paymentservice:1.11.1-paymentservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-paymentservice:1.11.1-paymentservice"
+                  fileURI: "-"
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-paymentservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-paymentservice"
+                  fileURI: "-"
+      artifacts: []
+  - emailservice:
+      type: "emailservice-type"
+      description: null
+      properties:
+        - OTEL_SERVICE_NAME: "emailservice"
+        - APP_ENV: "production"
+        - EMAIL_SERVICE_PORT: "6060"
+        - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://otelcol:4318/v1/traces"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=emailservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+      operations:
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-emailservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-emailservice"
+                  fileURI: "-"
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-emailservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-emailservice"
+                  fileURI: "-"
+      artifacts: []
+  - cartservice:
+      type: "cartservice-type"
+      description: null
+      properties:
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=cartservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - OTEL_SERVICE_NAME: "cartservice"
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4317"
+        - REDIS_ADDR: "valkeycart:6379"
+        - FLAGD_HOST: "flagd"
+        - FLAGD_PORT: "8013"
+        - ASPNETCORE_URLS: "http://*:7070"
+        - CART_SERVICE_PORT: "7070"
+        - VALKEY_ADDR: "valkeycart:6379"
+      operations:
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-cartservice:1.11.1-cartservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-cartservice:1.11.1-cartservice"
+                  fileURI: "-"
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-cartservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-cartservice"
+                  fileURI: "-"
+      artifacts: []
+  - kafka:
+      type: "kafka-type"
+      description: null
+      properties:
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4318"
+        - KAFKA_HEAP_OPTS: "-Xmx400m -Xms400m"
+        - KAFKA_SERVICE_ADDR: "kafka:9092"
+        - KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092"
+        - OTEL_SERVICE_NAME: "kafka"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=kafka,service.namespace=opentelemetry-demo,service.version=1.11.1"
+      operations:
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-kafka"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-kafka"
+                  fileURI: "-"
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-kafka:1.11.1-kafka"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-kafka:1.11.1-kafka"
+                  fileURI: "-"
+      artifacts: []
+  - frontend:
+      type: "frontend-type"
+      description: null
+      properties:
+        - WEB_OTEL_SERVICE_NAME: "frontend-web"
+        - FRONTEND_ADDR: "frontend:8080"
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4317"
+        - CHECKOUT_SERVICE_ADDR: "checkoutservice:5050"
+        - CURRENCY_SERVICE_ADDR: "currencyservice:7001"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=frontend,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - FLAGD_PORT: "8013"
+        - RECOMMENDATION_SERVICE_ADDR: "recommendationservice:9001"
+        - OTEL_SERVICE_NAME: "frontend"
+        - PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
+        - AD_SERVICE_ADDR: "adservice:9555"
+        - CART_SERVICE_ADDR: "cartservice:7070"
+        - FLAGD_HOST: "flagd"
+        - ENV_PLATFORM: "local"
+        - PORT: "8080"
+        - KAFKA_SERVICE_ADDR: "kafka:9092"
+        - VERSION: "1.11.1"
+        - PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://otelcol:8080/otlp-http/v1/traces"
+        - otel_collector_host: "otelcol"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
+        - SHIPPING_SERVICE_ADDR: "shippingservice:50050"
+      operations:
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-frontend:1.11.1-frontend"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-frontend:1.11.1-frontend"
+                  fileURI: "-"
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-frontend"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-frontend"
+                  fileURI: "-"
+      artifacts: []
+  - accountingservice:
+      type: "accountingservice-type"
+      description: null
+      properties:
+        - OTEL_SERVICE_NAME: "accountingservice"
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4318"
+        - KAFKA_SERVICE_ADDR: "kafka:9092"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=accountingservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
+      operations:
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-accountingservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-accountingservice"
+                  fileURI: "-"
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-accountingservice:1.11.1-accountingservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-accountingservice:1.11.1-accountingservice"
+                  fileURI: "-"
+      artifacts: []
+  - mongo:
+      type: "mongo-type"
+      description: null
+      properties: []
+      operations: []
+      artifacts: []
+  - productcatalogservice:
+      type: "productcatalogservice-type"
+      description: null
+      properties:
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4317"
+        - FLAGD_HOST: "flagd"
+        - PRODUCT_CATALOG_SERVICE_PORT: "3550"
+        - MONGO_PASSWORD: "mongo_product_catalog"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=productcatalogservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - MONGO_PORT: "27017"
+        - FLAGD_PORT: "8013"
+        - MONGO_USERNAME: "mongo"
+        - MONGO_HOSTNAME: "mongo"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
+        - OTEL_SERVICE_NAME: "productcatalogservice"
+      operations:
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice:1.11.1-productcatalogservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice:1.11.1-productcatalogservice"
+                  fileURI: "-"
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/ust-demaf/demo:1.11.1-productcatalogservice"
+                  fileURI: "-"
+      artifacts: []
+  - opensearch:
+      type: "opensearch-type"
+      description: null
+      properties: []
+      operations: []
+      artifacts: []
+  - checkoutservice:
+      type: "checkoutservice-type"
+      description: null
+      properties:
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4317"
+        - CURRENCY_SERVICE_ADDR: "currencyservice:7001"
+        - OTEL_SERVICE_NAME: "checkoutservice"
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=checkoutservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - FLAGD_PORT: "8013"
+        - PAYMENT_SERVICE_ADDR: "paymentservice:50051"
+        - PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
+        - OTEL_LOGS_EXPORTER: "otlp"
+        - CART_SERVICE_ADDR: "cartservice:7070"
+        - FLAGD_HOST: "flagd"
+        - KAFKA_SERVICE_ADDR: "kafka:9092"
+        - EMAIL_SERVICE_ADDR: "http://emailservice:6060"
+        - CHECKOUT_SERVICE_PORT: "5050"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
+        - SHIPPING_SERVICE_ADDR: "shippingservice:50050"
+      operations:
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-checkoutservice:1.11.1-checkoutservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-checkoutservice:1.11.1-checkoutservice"
+                  fileURI: "-"
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-checkoutservice"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-checkoutservice"
+                  fileURI: "-"
+      artifacts: []
+  - grafana:
+      type: "grafana-type"
+      description: null
+      properties:
+        - GF_INSTALL_PLUGINS: "grafana-opensearch-datasource"
+      operations:
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "grafana/grafana:11.2.0"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull grafana/grafana:11.2.0"
+                  fileURI: "-"
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "grafana/grafana:11.2.0"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run grafana/grafana:11.2.0"
+                  fileURI: "-"
+      artifacts:
+        - file:
+            name: "-"
+            fileURI: "file:/<absolute-path>/ansible/roles/grafana/files/grafana.ini"
+  - loadgenerator:
+      type: "loadgenerator-type"
+      description: null
+      properties:
+        - OTEL_RESOURCE_ATTRIBUTES: "service.name=loadgenerator,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - LOCUST_HOST: "http://frontendproxy:8080"
+        - OTEL_EXPORTER_OTLP_ENDPOINT: "http://otelcol:4317"
+        - LOCUST_WEB_PORT: "8089"
+        - LOCUST_WEB_HOST: "0.0.0.0"
+        - FLAGD_PORT: "8013"
+        - LOCUST_BROWSER_TRAFFIC_ENABLED: "true"
+        - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: "python"
+        - LOCUST_AUTOSTART: "true"
+        - OTEL_SERVICE_NAME: "loadgenerator"
+        - FLAGD_HOST: "flagd"
+        - KAFKA_SERVICE_ADDR: "kafka:9092"
+        - PORT: "8080"
+        - LOCUST_USERS: "10"
+        - LOCUST_HEADLESS: "false"
+        - PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://otelcol:8080/otlp-http/v1/traces"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "cumulative"
+      operations:
+        - Deploy Service:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-loadgenerator"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker run ghcr.io/open-telemetry/demo:1.11.1-loadgenerator"
+                  fileURI: "-"
+        - Pull the latest Docker image:
+            artifacts:
+              - docker_image:
+                  name: "ghcr.io/open-telemetry/demo:1.11.1-loadgenerator:1.11.1-loadgenerator"
+                  fileURI: "-"
+              - bash:
+                  name: "/bin/sh docker pull ghcr.io/open-telemetry/demo:1.11.1-loadgenerator:1.11.1-loadgenerator"
+                  fileURI: "-"
+      artifacts: []
+relations:
+  - shippingservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "shippingservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - quoteservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "quoteservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - currencyservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "currencyservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - adservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "adservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - adservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "adservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - frontendproxy_connectsTo_loadgenerator:
+      type: "ConnectsTo"
+      description: null
+      source: "frontendproxy"
+      target: "loadgenerator"
+      properties: []
+      operations: []
+  - frontendproxy_connectsTo_grafana:
+      type: "ConnectsTo"
+      description: null
+      source: "frontendproxy"
+      target: "grafana"
+      properties: []
+      operations: []
+  - frontendproxy_connectsTo_frontend:
+      type: "ConnectsTo"
+      description: null
+      source: "frontendproxy"
+      target: "frontend"
+      properties: []
+      operations: []
+  - frontendproxy_connectsTo_jaeger:
+      type: "ConnectsTo"
+      description: null
+      source: "frontendproxy"
+      target: "jaeger"
+      properties: []
+      operations: []
+  - imageprovider_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "imageprovider"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - frauddetectionservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "frauddetectionservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - frauddetectionservice_connectsTo_kafka:
+      type: "ConnectsTo"
+      description: null
+      source: "frauddetectionservice"
+      target: "kafka"
+      properties: []
+      operations: []
+  - recommendationservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "recommendationservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - recommendationservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "recommendationservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - recommendationservice_connectsTo_productcatalogservice:
+      type: "ConnectsTo"
+      description: null
+      source: "recommendationservice"
+      target: "productcatalogservice"
+      properties: []
+      operations: []
+  - paymentservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "paymentservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - paymentservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "paymentservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - emailservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "emailservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - cartservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "cartservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - cartservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "cartservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - cartservice_connectsTo_valkeycart:
+      type: "ConnectsTo"
+      description: null
+      source: "cartservice"
+      target: "valkeycart"
+      properties: []
+      operations: []
+  - kafka_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "kafka"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - frontend_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - frontend_connectsTo_recommendationservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "recommendationservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_adservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "adservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_checkoutservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "checkoutservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_shippingservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "shippingservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_imageprovider:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "imageprovider"
+      properties: []
+      operations: []
+  - frontend_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "flagd"
+      properties: []
+      operations: []
+  - frontend_connectsTo_currencyservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "currencyservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_productcatalogservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "productcatalogservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_quoteservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "quoteservice"
+      properties: []
+      operations: []
+  - frontend_connectsTo_cartservice:
+      type: "ConnectsTo"
+      description: null
+      source: "frontend"
+      target: "cartservice"
+      properties: []
+      operations: []
+  - accountingservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "accountingservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - accountingservice_connectsTo_kafka:
+      type: "ConnectsTo"
+      description: null
+      source: "accountingservice"
+      target: "kafka"
+      properties: []
+      operations: []
+  - productcatalogservice_connectsTo_mongo:
+      type: "ConnectsTo"
+      description: null
+      source: "productcatalogservice"
+      target: "mongo"
+      properties: []
+      operations: []
+  - productcatalogservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "productcatalogservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - productcatalogservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "productcatalogservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_otelcol:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "otelcol"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_shippingservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "shippingservice"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_emailservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "emailservice"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_kafka:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "kafka"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "flagd"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_currencyservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "currencyservice"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_paymentservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "paymentservice"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_productcatalogservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "productcatalogservice"
+      properties: []
+      operations: []
+  - checkoutservice_connectsTo_cartservice:
+      type: "ConnectsTo"
+      description: null
+      source: "checkoutservice"
+      target: "cartservice"
+      properties: []
+      operations: []
+  - loadgenerator_connectsTo_flagd:
+      type: "ConnectsTo"
+      description: null
+      source: "loadgenerator"
+      target: "flagd"
+      properties: []
+      operations: []
+  - loadgenerator_connectsTo_frontend:
+      type: "ConnectsTo"
+      description: null
+      source: "loadgenerator"
+      target: "frontend"
+      properties: []
+      operations: []
+  - shippingservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "shippingservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - valkeycart_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "valkeycart"
+      target: "localhost"
+      properties: []
+      operations: []
+  - quoteservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "quoteservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - currencyservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "currencyservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - flagd_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "flagd"
+      target: "localhost"
+      properties: []
+      operations: []
+  - jaeger_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "jaeger"
+      target: "localhost"
+      properties: []
+      operations: []
+  - adservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "adservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - prometheus_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "prometheus"
+      target: "localhost"
+      properties: []
+      operations: []
+  - otelcol_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "otelcol"
+      target: "localhost"
+      properties: []
+      operations: []
+  - frontendproxy_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "frontendproxy"
+      target: "localhost"
+      properties: []
+      operations: []
+  - imageprovider_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "imageprovider"
+      target: "localhost"
+      properties: []
+      operations: []
+  - frauddetectionservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "frauddetectionservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - recommendationservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "recommendationservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - paymentservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "paymentservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - emailservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "emailservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - cartservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "cartservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - kafka_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "kafka"
+      target: "localhost"
+      properties: []
+      operations: []
+  - frontend_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "frontend"
+      target: "localhost"
+      properties: []
+      operations: []
+  - accountingservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "accountingservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - mongo_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "mongo"
+      target: "localhost"
+      properties: []
+      operations: []
+  - productcatalogservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "productcatalogservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - opensearch_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "opensearch"
+      target: "localhost"
+      properties: []
+      operations: []
+  - checkoutservice_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "checkoutservice"
+      target: "localhost"
+      properties: []
+      operations: []
+  - grafana_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "grafana"
+      target: "localhost"
+      properties: []
+      operations: []
+  - loadgenerator_hostedOn_localhost:
+      type: "HostedOn"
+      description: null
+      source: "loadgenerator"
+      target: "localhost"
+      properties: []
+      operations: []
+component_types:
+  - BaseType:
+      extends: "-"
+      description: "This is the base type"
+      properties: []
+      operations: []
+  - shippingservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - QUOTE_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "http://quoteservice:8090"
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4317"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=shippingservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "shippingservice"
+        - SHIPPING_SERVICE_PORT:
+            type: "STRING"
+            required: false
+            default_value: "50050"
+      operations: []
+  - valkeycart-type:
+      extends: "-"
+      description: null
+      properties: []
+      operations: []
+  - quoteservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=quoteservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - QUOTE_SERVICE_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8090"
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4318"
+        - OTEL_PHP_INTERNAL_METRICS_ENABLED:
+            type: "STRING"
+            required: false
+            default_value: "true"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "quoteservice"
+        - OTEL_PHP_AUTOLOAD_ENABLED:
+            type: "STRING"
+            required: false
+            default_value: "true"
+      operations: []
+  - currencyservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4317"
+        - CURRENCY_SERVICE_PORT:
+            type: "STRING"
+            required: false
+            default_value: "7001"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=currencyservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - VERSION:
+            type: "STRING"
+            required: false
+            default_value: "1.11.1"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "currencyservice"
+      operations: []
+  - flagd-type:
+      extends: "-"
+      description: null
+      properties: []
+      operations: []
+  - jaeger-type:
+      extends: "-"
+      description: null
+      properties:
+        - METRICS_STORAGE_TYPE:
+            type: "STRING"
+            required: false
+            default_value: "prometheus"
+      operations: []
+  - adservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "adservice"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=adservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4318"
+        - FLAGD_HOST:
+            type: "STRING"
+            required: false
+            default_value: "flagd"
+        - FLAGD_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8013"
+        - AD_SERVICE_PORT:
+            type: "STRING"
+            required: false
+            default_value: "9555"
+        - OTEL_LOGS_EXPORTER:
+            type: "STRING"
+            required: false
+            default_value: "otlp"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE:
+            type: "STRING"
+            required: false
+            default_value: "cumulative"
+      operations: []
+  - prometheus-type:
+      extends: "-"
+      description: null
+      properties: []
+      operations: []
+  - otelcol-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_COLLECTOR_HOST:
+            type: "STRING"
+            required: false
+            default_value: "otelcol"
+        - OTEL_COLLECTOR_PORT_HTTP:
+            type: "STRING"
+            required: false
+            default_value: "4318"
+        - ENVOY_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8080"
+        - OTEL_COLLECTOR_PORT_GRPC:
+            type: "STRING"
+            required: false
+            default_value: "4317"
+      operations: []
+  - frontendproxy-type:
+      extends: "-"
+      description: null
+      properties: []
+      operations: []
+  - imageprovider-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_COLLECTOR_HOST:
+            type: "STRING"
+            required: false
+            default_value: "otelcol"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "imageprovider"
+        - VERSION:
+            type: "STRING"
+            required: false
+            default_value: "1.11.1"
+        - OTEL_COLLECTOR_PORT_GRPC:
+            type: "STRING"
+            required: false
+            default_value: "4317"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=imageprovider,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - IMAGE_PROVIDER_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8081"
+      operations: []
+  - frauddetectionservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=frauddetectionservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "frauddetectionservice"
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4318"
+        - FLAGD_HOST:
+            type: "STRING"
+            required: false
+            default_value: "flagd"
+        - KAFKA_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "kafka:9092"
+        - FLAGD_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8013"
+        - OTEL_INSTRUMENTATION_KAFKA_EXPERIMENTAL_SPAN_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "true"
+        - OTEL_INSTRUMENTATION_MESSAGING_EXPERIMENTAL_RECEIVE_TELEMETRY_ENABLED:
+            type: "STRING"
+            required: false
+            default_value: "true"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE:
+            type: "STRING"
+            required: false
+            default_value: "cumulative"
+      operations: []
+  - recommendationservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4317"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=recommendationservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - FLAGD_HOST:
+            type: "STRING"
+            required: false
+            default_value: "flagd"
+        - FLAGD_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8013"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "recommendationservice"
+        - OTEL_PYTHON_LOG_CORRELATION:
+            type: "STRING"
+            required: false
+            default_value: "true"
+        - PRODUCT_CATALOG_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "productcatalogservice:3550"
+        - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION:
+            type: "STRING"
+            required: false
+            default_value: "python"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE:
+            type: "STRING"
+            required: false
+            default_value: "cumulative"
+        - RECOMMENDATION_SERVICE_PORT:
+            type: "STRING"
+            required: false
+            default_value: "9001"
+      operations: []
+  - paymentservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - PAYMENT_SERVICE_PORT:
+            type: "STRING"
+            required: false
+            default_value: "50051"
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4317"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=paymentservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - FLAGD_HOST:
+            type: "STRING"
+            required: false
+            default_value: "flagd"
+        - FLAGD_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8013"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "paymentservice"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE:
+            type: "STRING"
+            required: false
+            default_value: "cumulative"
+      operations: []
+  - emailservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "emailservice"
+        - APP_ENV:
+            type: "STRING"
+            required: false
+            default_value: "production"
+        - EMAIL_SERVICE_PORT:
+            type: "STRING"
+            required: false
+            default_value: "6060"
+        - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4318/v1/traces"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=emailservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+      operations: []
+  - cartservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=cartservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "cartservice"
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4317"
+        - REDIS_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "valkeycart:6379"
+        - FLAGD_HOST:
+            type: "STRING"
+            required: false
+            default_value: "flagd"
+        - FLAGD_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8013"
+        - ASPNETCORE_URLS:
+            type: "STRING"
+            required: false
+            default_value: "http://*:7070"
+        - CART_SERVICE_PORT:
+            type: "STRING"
+            required: false
+            default_value: "7070"
+        - VALKEY_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "valkeycart:6379"
+      operations: []
+  - kafka-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4318"
+        - KAFKA_HEAP_OPTS:
+            type: "STRING"
+            required: false
+            default_value: "-Xmx400m -Xms400m"
+        - KAFKA_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "kafka:9092"
+        - KAFKA_ADVERTISED_LISTENERS:
+            type: "STRING"
+            required: false
+            default_value: "PLAINTEXT://kafka:9092"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "kafka"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=kafka,service.namespace=opentelemetry-demo,service.version=1.11.1"
+      operations: []
+  - frontend-type:
+      extends: "-"
+      description: null
+      properties:
+        - WEB_OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "frontend-web"
+        - FRONTEND_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "frontend:8080"
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4317"
+        - CHECKOUT_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "checkoutservice:5050"
+        - CURRENCY_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "currencyservice:7001"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=frontend,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - FLAGD_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8013"
+        - RECOMMENDATION_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "recommendationservice:9001"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "frontend"
+        - PRODUCT_CATALOG_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "productcatalogservice:3550"
+        - AD_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "adservice:9555"
+        - CART_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "cartservice:7070"
+        - FLAGD_HOST:
+            type: "STRING"
+            required: false
+            default_value: "flagd"
+        - ENV_PLATFORM:
+            type: "STRING"
+            required: false
+            default_value: "local"
+        - PORT:
+            type: "STRING"
+            required: false
+            default_value: "8080"
+        - KAFKA_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "kafka:9092"
+        - VERSION:
+            type: "STRING"
+            required: false
+            default_value: "1.11.1"
+        - PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:8080/otlp-http/v1/traces"
+        - otel_collector_host:
+            type: "STRING"
+            required: false
+            default_value: "otelcol"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE:
+            type: "STRING"
+            required: false
+            default_value: "cumulative"
+        - SHIPPING_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "shippingservice:50050"
+      operations: []
+  - accountingservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "accountingservice"
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4318"
+        - KAFKA_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "kafka:9092"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=accountingservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE:
+            type: "STRING"
+            required: false
+            default_value: "cumulative"
+      operations: []
+  - mongo-type:
+      extends: "-"
+      description: null
+      properties: []
+      operations: []
+  - productcatalogservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4317"
+        - FLAGD_HOST:
+            type: "STRING"
+            required: false
+            default_value: "flagd"
+        - PRODUCT_CATALOG_SERVICE_PORT:
+            type: "STRING"
+            required: false
+            default_value: "3550"
+        - MONGO_PASSWORD:
+            type: "STRING"
+            required: false
+            default_value: "mongo_product_catalog"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=productcatalogservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - MONGO_PORT:
+            type: "STRING"
+            required: false
+            default_value: "27017"
+        - FLAGD_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8013"
+        - MONGO_USERNAME:
+            type: "STRING"
+            required: false
+            default_value: "mongo"
+        - MONGO_HOSTNAME:
+            type: "STRING"
+            required: false
+            default_value: "mongo"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE:
+            type: "STRING"
+            required: false
+            default_value: "cumulative"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "productcatalogservice"
+      operations: []
+  - opensearch-type:
+      extends: "-"
+      description: null
+      properties: []
+      operations: []
+  - checkoutservice-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4317"
+        - CURRENCY_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "currencyservice:7001"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "checkoutservice"
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=checkoutservice,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - FLAGD_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8013"
+        - PAYMENT_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "paymentservice:50051"
+        - PRODUCT_CATALOG_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "productcatalogservice:3550"
+        - OTEL_LOGS_EXPORTER:
+            type: "STRING"
+            required: false
+            default_value: "otlp"
+        - CART_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "cartservice:7070"
+        - FLAGD_HOST:
+            type: "STRING"
+            required: false
+            default_value: "flagd"
+        - KAFKA_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "kafka:9092"
+        - EMAIL_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "http://emailservice:6060"
+        - CHECKOUT_SERVICE_PORT:
+            type: "STRING"
+            required: false
+            default_value: "5050"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE:
+            type: "STRING"
+            required: false
+            default_value: "cumulative"
+        - SHIPPING_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "shippingservice:50050"
+      operations: []
+  - grafana-type:
+      extends: "-"
+      description: null
+      properties:
+        - GF_INSTALL_PLUGINS:
+            type: "STRING"
+            required: false
+            default_value: "grafana-opensearch-datasource"
+      operations: []
+  - loadgenerator-type:
+      extends: "-"
+      description: null
+      properties:
+        - OTEL_RESOURCE_ATTRIBUTES:
+            type: "STRING"
+            required: false
+            default_value: "service.name=loadgenerator,service.namespace=opentelemetry-demo,service.version=1.11.1"
+        - LOCUST_HOST:
+            type: "STRING"
+            required: false
+            default_value: "http://frontendproxy:8080"
+        - OTEL_EXPORTER_OTLP_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:4317"
+        - LOCUST_WEB_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8089"
+        - LOCUST_WEB_HOST:
+            type: "STRING"
+            required: false
+            default_value: "0.0.0.0"
+        - FLAGD_PORT:
+            type: "STRING"
+            required: false
+            default_value: "8013"
+        - LOCUST_BROWSER_TRAFFIC_ENABLED:
+            type: "STRING"
+            required: false
+            default_value: "true"
+        - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION:
+            type: "STRING"
+            required: false
+            default_value: "python"
+        - LOCUST_AUTOSTART:
+            type: "STRING"
+            required: false
+            default_value: "true"
+        - OTEL_SERVICE_NAME:
+            type: "STRING"
+            required: false
+            default_value: "loadgenerator"
+        - FLAGD_HOST:
+            type: "STRING"
+            required: false
+            default_value: "flagd"
+        - KAFKA_SERVICE_ADDR:
+            type: "STRING"
+            required: false
+            default_value: "kafka:9092"
+        - PORT:
+            type: "STRING"
+            required: false
+            default_value: "8080"
+        - LOCUST_USERS:
+            type: "STRING"
+            required: false
+            default_value: "10"
+        - LOCUST_HEADLESS:
+            type: "STRING"
+            required: false
+            default_value: "false"
+        - PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:
+            type: "STRING"
+            required: false
+            default_value: "http://otelcol:8080/otlp-http/v1/traces"
+        - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE:
+            type: "STRING"
+            required: false
+            default_value: "cumulative"
+      operations: []
+  - localhost-type:
+      extends: "-"
+      description: null
+      properties: []
+      operations: []
+relation_types:
+  - DependsOn:
+      extends: "-"
+      description: "generic relation type"
+      properties: []
+      operations: []
+  - HostedOn:
+      extends: "DependsOn"
+      description: "hosted on relation"
+      properties: []
+      operations: []
+  - ConnectsTo:
+      extends: "DependsOn"
+      description: "connects to relation"
+      properties: []
+      operations: []
+  - ConnectsTo:
+      extends: "DependsOn"
+      description: null
+      properties: []
+      operations: []
+  - HostedOn:
+      extends: "DependsOn"
+      description: null
+      properties: []
+      operations: []
+  - DependsOn:
+      extends: "-"
+      description: null
+      properties: []
+      operations: []
