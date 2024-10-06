@@ -564,7 +564,10 @@ resource "docker_container" "flagd" {
     internal = 8013
   }
   volumes {
+    # linux or mac
     host_path      = abspath("../src/flagd")
+    # windows
+    #host_path      = "${var.project_path}${var.seperator}src${var.seperator}flagd"
     container_path = "/etc/flagd"
   }
 
@@ -694,12 +697,18 @@ resource "docker_container" "grafana" {
   restart = "unless-stopped"
   env     = ["GF_INSTALL_PLUGINS=grafana-opensearch-datasource"]
   volumes {
+    # linux or mac
     host_path      = abspath("../src/grafana/grafana.ini")
+    # windows
+    #host_path      = "${var.project_path}${var.seperator}src${var.seperator}grafana${var.seperator}grafana.ini"
     container_path = "/etc/grafana/grafana.ini"
 
   }
   volumes {
+    # linux or mac
     host_path      = abspath("../src/grafana/provisioning/")
+    # windows	
+    #host_path      = "${var.project_path}${var.seperator}src${var.seperator}grafana${var.seperator}provisioning{var.seperator}"
     container_path = "/etc/grafana/provisioning/"
   }
   ports {
@@ -725,11 +734,17 @@ resource "docker_container" "otelcol" {
   ]
   user = "0:0"
   volumes {
+    # linux or mac
     host_path      = abspath("../src/otelcollector/otelcol-config.yml")
+    # windows
+    #host_path      = "${var.project_path}${var.seperator}src${var.seperator}otelcollector${var.seperator}otelcol-config.yml"
     container_path = "/etc/otelcol-config.yml"
   }
   volumes {
+    # linux or mac
     host_path      = abspath("../src/otelcollector/otelcol-config-extras.yml")
+    # windows
+    # host_path      = "${var.project_path}${var.seperator}src${var.seperator}otelcollector${var.seperator}otelcol-config-extras.yml"
     container_path = "/etc/otelcol-config-extras.yml"
   }
   volumes {
@@ -770,7 +785,10 @@ resource "docker_container" "prometheus" {
     name = docker_network.open-telemetry-network.name
   }
   volumes {
+    # linux or mac
     host_path      = abspath("../src/prometheus/prometheus-config.yaml")
+    # windows
+    #host_path      = "${var.project_path}${var.seperator}src${var.seperator}prometheus${var.seperator}prometheus-config.yaml"
     container_path = "/etc/prometheus/prometheus-config.yaml"
   }
   memory  = 300
