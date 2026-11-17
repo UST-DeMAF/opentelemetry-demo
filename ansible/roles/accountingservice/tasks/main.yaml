@@ -7,7 +7,7 @@
 - name: Deploy Service
   docker_container:
     name: "{{ service_name }}"
-    image: "{{ image_name }}"
+    image: "{{ image_name }}:{{ demo_version }}-{{ service_name }}"
     env:
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://{{ otel_collector_host }}:{{ otel_collector_port_http }}"
       OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: "{{ otlp_metrics_temporality_preference }}"
