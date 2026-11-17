@@ -708,7 +708,7 @@ resource "docker_container" "grafana" {
     # linux or mac
     host_path      = abspath("../src/grafana/provisioning/")
     # windows	
-    #host_path      = "${var.project_path}${var.seperator}src${var.seperator}grafana${var.seperator}provisioning{var.seperator}"
+    #host_path      = "${var.project_path}${var.seperator}src${var.seperator}grafana${var.seperator}provisioning${var.seperator}"
     container_path = "/etc/grafana/provisioning/"
   }
   ports {
