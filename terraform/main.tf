@@ -174,7 +174,8 @@ resource "docker_container" "currencyservice" {
     "CURRENCY_SERVICE_PORT=7001",
     "VERSION=1.11.1",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317",
-    "OTEL_RESOURCE_ATTRIBUTES=ervice.namespace=opentelemetry-demo,service.version=1.11.1,service.name=currencyservice"
+    "OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,service.version=1.11.1",
+    "OTEL_SERVICE_NAME=currencyservice"
   ]
 
 }
